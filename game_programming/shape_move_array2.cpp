@@ -1,3 +1,4 @@
+/*
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <cmath>
@@ -30,7 +31,7 @@ int main()
         colors[i] = sf::Color(rand() % 255, rand() % 255, rand() % 255);
     }
 
-    // define shape
+    // define shape 
     sf::RectangleShape rectangle;
 
     // Start the game loop
@@ -66,3 +67,4 @@ int main()
         window.display();
     }
 }
+*/

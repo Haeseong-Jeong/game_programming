@@ -23,7 +23,7 @@ int main()
     sf::RectangleShape rectangle2;
     rectangle2.setSize(sf::Vector2f(rect_w, rect_h));
     rectangle2.setFillColor(sf::Color::Yellow);
-    rectangle2.setPosition({ 0.0f, (float)window_h / 2 });
+    rectangle2.setPosition({ rect_x, (float)window_h / 2 });
 
     // Create a circle shape
     float radius = 3.0f;

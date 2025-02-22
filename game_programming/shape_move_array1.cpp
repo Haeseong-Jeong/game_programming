@@ -1,3 +1,4 @@
+/*
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <cmath>
@@ -10,28 +11,23 @@ int main()
     unsigned int window_h = 600;
     sf::RenderWindow window(sf::VideoMode({ window_w, window_h }), "SFML window");
 
-    // shape initial value
+    // Create a rectangle shape
     const int num_rect = 20;
+    sf::RectangleShape rectangles[num_rect];
 
     float rect_w = 50.0f;
     float rect_h = 50.0f;
     float rect_dx = 0.1f;
 
-    float randx[num_rect] = { 0.0f };
-    float randy[num_rect] = { 0.0f };
-
-    sf::Color colors[num_rect];
-
     for (int i = 0; i < num_rect; i++)
     {
-        randx[i] = rand() % (int)(window_w - rect_w);
-        randy[i] = rand() % (int)(window_h - rect_h);
+        float randx = rand() % (int)(window_w - rect_w);
+        float randy = rand() % (int)(window_h - rect_h);
 
-        colors[i] = sf::Color(rand() % 255, rand() % 255, rand() % 255);
+        rectangles[i].setSize(sf::Vector2f(rect_w, rect_h));
+        rectangles[i].setPosition({ randx,  randy });
+        rectangles[i].setFillColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
     }
-
-    // define shape
-    sf::RectangleShape rectangle;
 
     // Start the game loop
     while (window.isOpen()) // 1 -> 2 -> 3 loop
@@ -47,22 +43,20 @@ int main()
         // 1. Clear screen
         window.clear();
 
+        // 2. Move and Draw the shape
         for (int i = 0; i < num_rect; i++)
         {
-            rectangle.setSize(sf::Vector2f(rect_w, rect_h));
-            if (randx[i] >= (window_w + rect_w))
+            sf::Vector2f position = rectangles[i].getPosition();
+            if (position.x >= (window_w + rect_w))
             {
-                rectangle.setPosition({ randx[i] = -rect_w,  randy[i] });
+                rectangles[i].setPosition({ -rect_w, position.y});
             }
-            else
-            {
-                rectangle.setPosition({ randx[i] += rect_dx,  randy[i] });
-            }
-            rectangle.setFillColor(colors[i]);
-            window.draw(rectangle);
+            rectangles[i].move({abs(rect_dx), 0.0f});
+            window.draw(rectangles[i]);
         }
 
         // 3. Display the window
         window.display();
     }
 }
+*/
