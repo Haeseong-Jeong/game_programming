@@ -14,24 +14,31 @@ int main()
     // shape initial value
     const int num_rect = 20;
 
-    float rect_w = 50.0f;
-    float rect_h = 50.0f;
-    float rect_dx = 0.1f;
+    const float shape_size_min = 10.0f;
+    const float shape_size_max = 20.0f;
 
     float randx[num_rect] = { 0.0f };
     float randy[num_rect] = { 0.0f };
+    float randw[num_rect] = { 0.0f };
+    float randh[num_rect] = { 0.0f };
+    float rand_dx[num_rect] = { 0.0f };
 
     sf::Color colors[num_rect];
 
     for (int i = 0; i < num_rect; i++)
     {
-        randx[i] = rand() % (int)(window_w - rect_w);
-        randy[i] = rand() % (int)(window_h - rect_h);
+        randw[i] = shape_size_min + static_cast<float>(std::rand()) / RAND_MAX * (shape_size_max - shape_size_min);
+        randh[i] = shape_size_min + static_cast<float>(std::rand()) / RAND_MAX * (shape_size_max - shape_size_min);
+
+        randx[i] = rand() % (int)(window_w - randw[i]);
+        randy[i] = rand() % (int)(window_h - randh[i]);
+
+        rand_dx[i] = (float)rand() / (float)RAND_MAX;
 
         colors[i] = sf::Color(rand() % 255, rand() % 255, rand() % 255);
     }
 
-    // define shape 
+    // define shape
     sf::RectangleShape rectangle;
 
     // Start the game loop
@@ -48,17 +55,33 @@ int main()
         // 1. Clear screen
         window.clear();
 
-        for (int i = 0; i < num_rect; i++)
+
+        // 2. Draw shape (move and regen)
+        for (int i = 0; i < num_rect/2; i++)
         {
-            rectangle.setSize(sf::Vector2f(rect_w, rect_h));
-            if (randx[i] >= (window_w + rect_w))
+            rectangle.setSize(sf::Vector2f(randw[i], randh[i]));
+            if (randx[i] >= (window_w + randw[i]))
             {
-                rectangle.setPosition({ randx[i] = -rect_w,  randy[i] });
+                rectangle.setPosition({ randx[i] = -randw[i],  randy[i]});
             }
             else
             {
-                rectangle.setPosition({ randx[i] += rect_dx,  randy[i] });
+                rectangle.setPosition({ randx[i] += rand_dx[i],  randy[i] });
             }
+            rectangle.setFillColor(colors[i]);
+            window.draw(rectangle);
+        }
+
+
+        // 2. Draw shape (move and retrun)
+        for (int i = num_rect/2; i < num_rect; i++)
+        {
+            rectangle.setSize(sf::Vector2f(randw[i], randh[i]));
+            if (randx[i] >= (window_w - randw[i]) || randx[i] < 0)
+            {
+                rand_dx[i] = -rand_dx[i];
+            }
+            rectangle.setPosition({ randx[i] += rand_dx[i],  randy[i] });
             rectangle.setFillColor(colors[i]);
             window.draw(rectangle);
         }

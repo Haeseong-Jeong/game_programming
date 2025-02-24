@@ -13,11 +13,11 @@ int main()
 
     // Create a rectangle shape
     const int num_rect = 20;
+    const float rect_w = 20.0f;
+    const float rect_h = 20.0f;
+    const float rect_dx = 0.1f;
     sf::RectangleShape rectangles[num_rect];
 
-    float rect_w = 50.0f;
-    float rect_h = 50.0f;
-    float rect_dx = 0.1f;
 
     for (int i = 0; i < num_rect; i++)
     {
@@ -43,7 +43,7 @@ int main()
         // 1. Clear screen
         window.clear();
 
-        // 2. Move and Draw the shape
+        // 2. Draw shape (move and regen)
         for (int i = 0; i < num_rect; i++)
         {
             sf::Vector2f position = rectangles[i].getPosition();
