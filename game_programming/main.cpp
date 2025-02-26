@@ -1,44 +1,39 @@
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#else
+#define DBG_NEW new
+#endif
+
+#include <cmath>
+#include <random>
+#include <iostream>
+#include "Player.h"
+#include "Enemy.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <cmath>
-#include <iostream>
+
 
 int main()
 {
+    // ****** Detected memory leaks! ******
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     // Create the main window
-    unsigned int window_w = 800;
-    unsigned int window_h = 600;
-    sf::RenderWindow window(sf::VideoMode({ window_w, window_h }), "SFML window");
+    int window_w = 800;
+    int window_h = 600;
+    sf::RenderWindow window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "SFML window");
 
-    // shape initial value
-    const int num_rect = 20;
+    // define player
+    Player player;  //default constructor method. no use ()....
+    player.set_position(window);
 
-    const float shape_size_min = 10.0f;
-    const float shape_size_max = 20.0f;
-
-    float randx[num_rect] = { 0.0f };
-    float randy[num_rect] = { 0.0f };
-    float randw[num_rect] = { 0.0f };
-    float randh[num_rect] = { 0.0f };
-    float rand_dx[num_rect] = { 0.0f };
-
-    sf::Color colors[num_rect];
-
-    for (int i = 0; i < num_rect; i++)
-    {
-        randw[i] = shape_size_min + static_cast<float>(std::rand()) / RAND_MAX * (shape_size_max - shape_size_min);
-        randh[i] = shape_size_min + static_cast<float>(std::rand()) / RAND_MAX * (shape_size_max - shape_size_min);
-
-        randx[i] = rand() % (int)(window_w - randw[i]);
-        randy[i] = rand() % (int)(window_h - randh[i]);
-
-        rand_dx[i] = (float)rand() / (float)RAND_MAX;
-
-        colors[i] = sf::Color(rand() % 255, rand() % 255, rand() % 255);
-    }
-
-    // define shape
-    sf::RectangleShape rectangle;
+    // define enemy
+    int enemy_num = 10;
+    Enemy* enemies = new Enemy[enemy_num];
+    for (int i = 0; i < enemy_num; i++) { enemies[i].set_position(window); }
 
     // Start the game loop
     while (window.isOpen()) // 1 -> 2 -> 3 loop
@@ -51,41 +46,24 @@ int main()
                 window.close();
         }
 
+        // press action
+        player.move_player_by_key();
+        player.move_player_by_mouse(window);
+
         // 1. Clear screen
         window.clear();
 
+        // 2. Draw enemy and player
+        player.draw_player(window);
 
-        // 2. Draw shape (move and regen)
-        for (int i = 0; i < num_rect/2; i++)
+        for (int i = 0; i < enemy_num; i++)
         {
-            rectangle.setSize(sf::Vector2f(randw[i], randh[i]));
-            if (randx[i] >= (window_w + randw[i]))
-            {
-                rectangle.setPosition({ randx[i] = -randw[i],  randy[i]});
-            }
-            else
-            {
-                rectangle.setPosition({ randx[i] += rand_dx[i],  randy[i] });
-            }
-            rectangle.setFillColor(colors[i]);
-            window.draw(rectangle);
-        }
-
-
-        // 2. Draw shape (move and retrun)
-        for (int i = num_rect/2; i < num_rect; i++)
-        {
-            rectangle.setSize(sf::Vector2f(randw[i], randh[i]));
-            if (randx[i] >= (window_w - randw[i]) || randx[i] < 0)
-            {
-                rand_dx[i] = -rand_dx[i];
-            }
-            rectangle.setPosition({ randx[i] += rand_dx[i],  randy[i] });
-            rectangle.setFillColor(colors[i]);
-            window.draw(rectangle);
+            enemies[i].draw_enemy(window);
+            enemies[i].move_enemy(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed());
         }
 
         // 3. Display the window
         window.display();
     }
+    delete[] enemies;
 }

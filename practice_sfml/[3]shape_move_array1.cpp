@@ -1,4 +1,3 @@
-/*
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <cmath>
@@ -59,4 +58,3 @@ int main()
         window.display();
     }
 }
-*/
