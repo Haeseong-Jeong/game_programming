@@ -22,19 +22,19 @@ sf::Vector2f Player::get_position() { return rect.getPosition(); }
 
 void Player::draw(sf::RenderWindow& window) { window.draw(rect); }
 
-void Player::move_by_key()
+void Player::move_by_key(float deltatime)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-        rect.move({ -speed, 0.f });
+        rect.move({ -speed * deltatime, 0.f });
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-        rect.move({ speed, 0.f });
+        rect.move({ speed * deltatime, 0.f });
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
-        rect.move({ 0.f, -speed });
+        rect.move({ 0.f, -speed * deltatime });
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-        rect.move({ 0.f, speed });
+        rect.move({ 0.f, speed * deltatime });
     }
 }
 

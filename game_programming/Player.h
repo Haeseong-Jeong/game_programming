@@ -21,7 +21,7 @@ public:
 
     sf::Vector2f get_position();
 
-    void move_by_key();
+    void move_by_key(float deltatime);
 
     void move_by_mouse(sf::Window& window);
 

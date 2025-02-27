@@ -30,7 +30,7 @@ int main()
 
 
     // define player
-    Player player;  //default constructor method. no use ()....
+    Player player(550.0f);  //default constructor method no use ()... ->  Player player;
     player.set_position(window);
 
 
@@ -51,6 +51,7 @@ int main()
 
 
     // Start the game loop
+    sf::Clock clock;
     while (window.isOpen()) // 1 -> 2 -> 3 loop
     {
         // Process events
@@ -60,9 +61,10 @@ int main()
             if (event->is<sf::Event::Closed>())
                 window.close();
         }
+        float deltatime = clock.restart().asSeconds();
 
         // press action
-        player.move_by_key();
+        player.move_by_key(deltatime);
         player.move_by_mouse(window);
 
         // 1. Clear screen
@@ -80,7 +82,7 @@ int main()
         for (int i = 0; i < enemy_num; i++)
         {
             enemies[i].draw(window);
-            enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed());
+            enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
             //enemies2[i].draw(window);
             //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
         }

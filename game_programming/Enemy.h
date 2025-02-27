@@ -24,7 +24,7 @@ public:
 
     float get_speed();
     
-    void move(sf::Vector2f player_position, Enemy& enemy, int num_enemy, float speed);
+    void move(sf::Vector2f player_position, Enemy& enemy, int num_enemy, float speed, float deltatime);
     
     void draw(sf::RenderWindow& window);
 };
