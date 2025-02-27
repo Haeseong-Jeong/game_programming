@@ -21,11 +21,11 @@ public:
 
     sf::Vector2f get_position();
 
-    void move_player_by_key();
+    void move_by_key();
 
-    void move_player_by_mouse(sf::Window& window);
+    void move_by_mouse(sf::Window& window);
 
-    void draw_player(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window);
 };
 
 //#endif

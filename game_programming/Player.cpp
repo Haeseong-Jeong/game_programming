@@ -18,12 +18,11 @@ void Player::set_position(sf::Window& window)
     rect.setPosition({ sf::Vector2f(window_size.x / 2 + width, window_size.y / 2 + height) });
 }
 
-sf::Vector2f Player::get_position()
-{
-    return rect.getPosition();
-}
+sf::Vector2f Player::get_position() { return rect.getPosition(); }
 
-void Player::move_player_by_key()
+void Player::draw(sf::RenderWindow& window) { window.draw(rect); }
+
+void Player::move_by_key()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
         rect.move({ -speed, 0.f });
@@ -39,7 +38,7 @@ void Player::move_player_by_key()
     }
 }
 
-void Player::move_player_by_mouse(sf::Window& window)
+void Player::move_by_mouse(sf::Window& window)
 {
     // mouse press
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
@@ -49,8 +48,3 @@ void Player::move_player_by_mouse(sf::Window& window)
     }
 }
 
-
-void Player::draw_player(sf::RenderWindow& window)
-{
-    window.draw(rect);
-}

@@ -12,15 +12,21 @@ private:
     float radius;
 
 public:
+    Enemy(const Enemy& other);
     Enemy(float radius);
     Enemy();
 
+    Enemy& operator=(const Enemy& other);
+
     void set_position(sf::Window& window);
+
     sf::Vector2f get_position();
 
     float get_speed();
-    void draw_enemy(sf::RenderWindow& window);
-    void move_enemy(sf::Vector2f player_position, Enemy& enemy, int num_enemy, float speed);
+    
+    void move(sf::Vector2f player_position, Enemy& enemy, int num_enemy, float speed);
+    
+    void draw(sf::RenderWindow& window);
 };
 
 //#endif
