@@ -44,14 +44,16 @@ int main()
 
 
     //defince bullet
-    Bullet bullet;
-    bullet.set_position(&player);
-    //bullet.shoot();
-    //bullet.draw(window);
+    int bullet_num = enemy_num * 2;
+    Bullet* bullets = new Bullet[bullet_num];
+    bullets[0].shoot_flag = true;
+    bullets[0].set_position(player.get_position());
 
 
     // Start the game loop
     sf::Clock clock;
+    sf::Clock bullet_clock;
+    float fire_rate = 1.0f;
     while (window.isOpen()) // 1 -> 2 -> 3 loop
     {
         // Process events
@@ -67,29 +69,75 @@ int main()
         player.move_by_key(deltatime);
         player.move_by_mouse(window);
 
+        // bullet shoot or pass
+        for (int i = 0; i < bullet_num; i++)
+        {
+            //float bullet_time = bullet_clock.getElapsedTime().asSeconds();
+            if ( (bullet_clock.getElapsedTime().asSeconds() >= fire_rate) && (bullets[i].shoot_flag == false) )
+            {
+                bullets[i].shoot_flag = true;
+                bullets[i].set_position(player.get_position());
+                bullet_clock.restart();
+                break;
+            }
+        }
+
+
         // 1. Clear screen
         window.clear();
 
         // 2. Draw enemy and player
-
-        //Bullet bullet;
-        //bullet.set_position(&player);
-        bullet.draw(window);
-        bullet.shoot();
-
         player.draw(window);
 
         for (int i = 0; i < enemy_num; i++)
         {
             enemies[i].draw(window);
-            enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
             //enemies2[i].draw(window);
+            //enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
             //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
         }
+
+
+        for (int i = 0; i < bullet_num; i++)
+        {
+            if (bullets[i].shoot_flag == true)
+            {
+                bullets[i].draw(window);
+            }
+        }
+
+        // bullet move
+        for (int i = 0; i < bullet_num; i++)
+        {
+            if (bullets[i].shoot_flag == true)
+            {
+                bullets[i].shoot(deltatime);
+            }
+        }
+
+        // bullet remove within boundary
+        for (int i = 0; i < bullet_num; i++)
+        {
+            if (bullets[i].get_position().x > window_w)
+            {
+                bullets[i].shoot_flag = false;
+            }
+        }
+
+
+        for (int i = 0; i < enemy_num; i++)
+        {
+            enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
+            //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
+        }
+
+
+
 
         // 3. Display the window
         window.display();
     }
     delete[] enemies;
     delete[] enemies2;
+    delete[] bullets;
 }

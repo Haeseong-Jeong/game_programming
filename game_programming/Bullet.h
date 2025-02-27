@@ -10,16 +10,18 @@ private:
     float radius;
 
 public:
-    Bullet(float radius, float speed);
+    bool shoot_flag;
+
+    //Bullet(sf::Vector2f player_position);
     Bullet();
 
     //~Bullet();
 
-    void set_position(Player* player);
+    void set_position(sf::Vector2f player_position);
 
-    //sf::Vector2f get_position();
+    sf::Vector2f get_position();
 
-    void shoot();
+    void shoot(float deltatime);
 
     void draw(sf::RenderWindow& window);
 };

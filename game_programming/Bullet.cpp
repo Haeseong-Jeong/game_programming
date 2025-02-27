@@ -1,28 +1,33 @@
 #include "Player.h"
 #include "Bullet.h"
 
+//Bullet::Bullet(sf::Vector2f player_position) : circle({ 5.0f }), radius{ 5.0f }, speed{ 550.0f }, shoot_flag{ false }
+//{
+//	circle.setPosition(player_position);
+//}
 
-Bullet::Bullet(float radius, float speed) : circle({radius}), radius{radius}, speed{ speed }
-{
-	circle.setFillColor(sf::Color::Green);
+Bullet::Bullet() : radius{ 3.0f }, speed{ 550.0f }, shoot_flag{ false } { 
+	circle.setRadius(radius);
+	circle.setFillColor(sf::Color::Green); 
 }
-
-Bullet::Bullet() : Bullet(5.0f, 0.2f) {}
 
 //Bullet::~Bullet()
 //{
 //}
 
-void Bullet::set_position(Player* player)
+void Bullet::set_position(sf::Vector2f player_position)
 {
-	sf::Vector2f player_position = player->get_position();
 	circle.setPosition(player_position);
 }
 
-void Bullet::shoot()
+sf::Vector2f Bullet::get_position()
 {
-	circle.move({ speed, 0.0f });
-	//circle.move({ 0.2f, 0.0f });
+	return sf::Vector2f(circle.getPosition());
+}
+
+void Bullet::shoot(float deltatime)
+{
+	circle.move({ speed * deltatime, 0.0f });
 }
 
 void Bullet::draw(sf::RenderWindow& window) { window.draw(circle); }
