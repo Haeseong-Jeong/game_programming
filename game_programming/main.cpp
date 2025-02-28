@@ -61,7 +61,7 @@ int main()
     // Start the game loop
     sf::Clock clock;
     sf::Clock bullet_clock;
-    float fire_rate = 1.0f;
+    float shoot_period = 1.0f;
     while (window.isOpen()) // 1 -> 2 -> 3 loop
     {
         // Process events
@@ -79,7 +79,7 @@ int main()
 
 
         // judge bullet shoot
-        if (bullet_clock.getElapsedTime().asSeconds() >= fire_rate)
+        if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period)
         {
             Bullet* bullet = new Bullet(player.get_position());
             bullets.push_back(bullet);
