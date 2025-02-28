@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <random>
+#include <vector>
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -24,8 +25,8 @@ int main()
 
 
     // Create the main window
-    int window_w = 800;
-    int window_h = 600;
+    int window_w = 1200;
+    int window_h = 800;
     sf::RenderWindow window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "SFML window");
 
 
@@ -36,11 +37,21 @@ int main()
 
     // define enemy
     int enemy_num = 5;
-    Enemy* enemies = new Enemy[enemy_num];
-    for (int i = 0; i < enemy_num; i++) { enemies[i].set_position(window); }
-    // enemy copy
-    Enemy* enemies2 = new Enemy[enemy_num];
-    for (int i = 0; i < enemy_num; i++) { enemies2[i] = enemies[i]; }  // copy operator!! 
+
+    std::vector<Enemy*> enemies;
+    for (int i = 0; i < enemy_num; i++)
+    {
+        Enemy* enemy = new Enemy; //default constructor
+        enemy->set_position(window);
+        enemies.push_back(enemy);
+    }
+
+    for (int i = 0; i < enemy_num; i++)
+    {
+        Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
+        enemies.push_back(enemy2);
+    }
+
 
 
     //defince bullet
@@ -89,9 +100,9 @@ int main()
         // 2. Draw enemy and player
         player.draw(window);
 
-        for (int i = 0; i < enemy_num; i++)
+        for (int i = 0; i < enemies.size(); i++)
         {
-            enemies[i].draw(window);
+            enemies[i]->draw(window); // == (*enemies[i]).draw(window);
             //enemies2[i].draw(window);
             //enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
             //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
@@ -125,9 +136,9 @@ int main()
         }
 
 
-        for (int i = 0; i < enemy_num; i++)
+        for (int i = 0; i < enemies.size(); i++)
         {
-            enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
+            enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
             //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
         }
 
@@ -137,7 +148,12 @@ int main()
         // 3. Display the window
         window.display();
     }
-    delete[] enemies;
-    delete[] enemies2;
+
+    for (int i = 0; i < enemies.size(); i++)
+    {
+        delete enemies[i];
+    }
+    //delete[] enemies;
+    //delete[] enemies2;
     delete[] bullets;
 }

@@ -68,10 +68,10 @@ float Enemy::get_speed() { return speed; }
 void Enemy::draw(sf::RenderWindow& window) { window.draw(circle); }
 
 
-void Enemy::move(sf::Vector2f player_position, Enemy& enemy, int num_enemy, float speed, float deltatime)
+void Enemy::move(sf::Vector2f player_position, Enemy* enemy, int num_enemy, float speed, float deltatime)
 {
     //vector = destination - start
-    sf::Vector2f enemy_position = enemy.get_position();
+    sf::Vector2f enemy_position = enemy->get_position();
 
     for (int i = 0; i < num_enemy; i++)
     {
@@ -81,6 +81,6 @@ void Enemy::move(sf::Vector2f player_position, Enemy& enemy, int num_enemy, floa
         float distance = sqrt(enemy_to_player_x * enemy_to_player_x + enemy_to_player_y * enemy_to_player_y);
 
         //enemy.circle.setPosition({ enemy_position.x - enemy_to_player_x / distance * speed, enemy_position.y - enemy_to_player_y / distance * speed });
-        enemy.circle.move({ (enemy_to_player_x / distance) * speed * deltatime, (enemy_to_player_y / distance) * speed * deltatime });
+        enemy->circle.move({ (enemy_to_player_x / distance) * speed * deltatime, (enemy_to_player_y / distance) * speed * deltatime });
     }
 }
