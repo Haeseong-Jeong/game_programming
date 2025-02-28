@@ -12,7 +12,7 @@ private:
 public:
     bool shoot_flag;
 
-    //Bullet(sf::Vector2f player_position);
+    Bullet(sf::Vector2f player_position);
     Bullet();
 
     //~Bullet();

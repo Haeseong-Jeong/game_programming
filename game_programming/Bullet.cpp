@@ -6,6 +6,13 @@
 //	circle.setPosition(player_position);
 //}
 
+Bullet::Bullet(sf::Vector2f player_position) : radius{ 3.0f }, speed{ 550.0f }, shoot_flag{ false } {
+	circle.setRadius(radius);
+	circle.setFillColor(sf::Color::Green);
+	circle.setPosition(player_position);
+}
+
+
 Bullet::Bullet() : radius{ 3.0f }, speed{ 550.0f }, shoot_flag{ false } { 
 	circle.setRadius(radius);
 	circle.setFillColor(sf::Color::Green); 

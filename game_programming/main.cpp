@@ -37,7 +37,6 @@ int main()
 
     // define enemy
     int enemy_num = 5;
-
     std::vector<Enemy*> enemies;
     for (int i = 0; i < enemy_num; i++)
     {
@@ -45,20 +44,18 @@ int main()
         enemy->set_position(window);
         enemies.push_back(enemy);
     }
-
-    for (int i = 0; i < enemy_num; i++)
+    for (int i = 0; i < enemy_num; i++) // copy enemy
     {
         Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
         enemies.push_back(enemy2);
     }
 
 
-
-    //defince bullet
-    int bullet_num = enemy_num * 2;
-    Bullet* bullets = new Bullet[bullet_num];
-    bullets[0].shoot_flag = true;
-    bullets[0].set_position(player.get_position());
+    // defince bullet
+    std::vector<Bullet*> bullets;
+    Bullet* bullet = new Bullet(player.get_position()); // input the beginning bullet
+    bullet->shoot_flag = true; 
+    bullets.push_back(bullet); 
 
 
     // Start the game loop
@@ -80,69 +77,38 @@ int main()
         player.move_by_key(deltatime);
         player.move_by_mouse(window);
 
-        // bullet shoot or pass
-        for (int i = 0; i < bullet_num; i++)
-        {
-            //float bullet_time = bullet_clock.getElapsedTime().asSeconds();
-            if ( (bullet_clock.getElapsedTime().asSeconds() >= fire_rate) && (bullets[i].shoot_flag == false) )
-            {
-                bullets[i].shoot_flag = true;
-                bullets[i].set_position(player.get_position());
-                bullet_clock.restart();
-                break;
-            }
-        }
 
+        // judge bullet shoot
+        if (bullet_clock.getElapsedTime().asSeconds() >= fire_rate)
+        {
+            Bullet* bullet = new Bullet(player.get_position());
+            bullets.push_back(bullet);
+            bullet_clock.restart();
+        }
 
         // 1. Clear screen
         window.clear();
 
-        // 2. Draw enemy and player
+        // 2. Draw enemy, player, bullet
         player.draw(window);
 
         for (int i = 0; i < enemies.size(); i++)
         {
             enemies[i]->draw(window); // == (*enemies[i]).draw(window);
-            //enemies2[i].draw(window);
-            //enemies[i].move(player.get_position(), enemies[i], enemy_num, enemies[i].get_speed(), deltatime);
-            //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
+            enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
         }
 
-
-        for (int i = 0; i < bullet_num; i++)
+        for (int i = 0; i < bullets.size(); i++)
         {
-            if (bullets[i].shoot_flag == true)
-            {
-                bullets[i].draw(window);
-            }
+            bullets[i]->draw(window);
+            bullets[i]->shoot(deltatime);
         }
-
-        // bullet move
-        for (int i = 0; i < bullet_num; i++)
-        {
-            if (bullets[i].shoot_flag == true)
-            {
-                bullets[i].shoot(deltatime);
-            }
-        }
+        //std::cout << "총알 지우기 전" << bullets.size() << std::endl;
 
         // bullet remove within boundary
-        for (int i = 0; i < bullet_num; i++)
-        {
-            if (bullets[i].get_position().x > window_w)
-            {
-                bullets[i].shoot_flag = false;
-            }
-        }
-
-
-        for (int i = 0; i < enemies.size(); i++)
-        {
-            enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
-            //enemies2[i].move(player.get_position(), enemies2[i], enemy_num, enemies2[i].get_speed());
-        }
-
-
+        // rambda capture!! we have to use outter value (window_w). so, use [&] not []!!
+        std::erase_if(bullets, [&](Bullet* bullet) { return bullet->get_position().x > window_w; });
+        //std::cout << "총알 지우기 후" << bullets.size() << std::endl;
 
 
         // 3. Display the window
@@ -153,7 +119,8 @@ int main()
     {
         delete enemies[i];
     }
-    //delete[] enemies;
-    //delete[] enemies2;
-    delete[] bullets;
+    for (int i = 0; i < bullets.size(); i++)
+    {
+        delete bullets[i];
+    }
 }
