@@ -40,15 +40,14 @@ int main()
     std::vector<Enemy*> enemies;
     for (int i = 0; i < enemy_num; i++)
     {
-        Enemy* enemy = new Enemy; //default constructor
-        enemy->set_position(window);
+        Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player.get_position()};
         enemies.push_back(enemy);
     }
-    for (int i = 0; i < enemy_num; i++) // copy enemy
-    {
-        Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
-        enemies.push_back(enemy2);
-    }
+    //for (int i = 0; i < enemy_num; i++) // copy enemy
+    //{
+    //    Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
+    //    enemies.push_back(enemy2);
+    //}
 
 
     // defince bullet
@@ -66,8 +65,12 @@ int main()
 
     // Start the game loop
     sf::Clock clock;
+    sf::Clock enemy_clock;
     sf::Clock bullet_clock;
+
+    float enemy_period = 5.0f;
     float shoot_period = 1.0f;
+
     while (window.isOpen()) // 1 -> 2 -> 3 loop
     {
         // Process events
@@ -83,6 +86,17 @@ int main()
         player.move_by_key(deltatime);
         player.move_by_mouse(window);
 
+        // judge enemy gen
+        if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period)
+        {
+            for (int i = 0; i < enemy_num; i++)
+            {
+                Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player.get_position() };
+                enemies.push_back(enemy);
+            }
+            enemy_clock.restart();
+        }
+
 
         sf::Vector2f direction = player.get_bullet_direction(enemies, enemies.size());
         // judge bullet shoot
@@ -96,7 +110,7 @@ int main()
         // 1. Clear screen
         window.clear();
 
-        // 2. Draw enemy, player, bullet
+        // 2. Draw player, enemy, bullet
         player.draw(window);
 
         for (int i = 0; i < enemies.size(); i++)
@@ -123,6 +137,7 @@ int main()
         window.display();
     }
 
+    // delete new memory
     for (int i = 0; i < enemies.size(); i++)
     {
         delete enemies[i];

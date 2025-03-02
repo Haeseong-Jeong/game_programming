@@ -14,8 +14,23 @@ std::mt19937 gen(rd()); // 난수 생성 엔진
 std::uniform_int_distribution<int> enemy_color(0, 255); // 색 범위 설정
 //std::uniform_real_distribution<float> enemy_speed(0.01f, 0.05f); // 속도 범위 설정
 std::uniform_real_distribution<float> enemy_speed(200.0f, 350.0f); // 속도 범위 설정
+std::uniform_real_distribution<float> enemy_speed(50.0f, 100.0f); // 속도 범위 설정
 std::uniform_real_distribution<float> enemy_size(5.0f, 10.0f); // 크기 범위 설정
 
+std::uniform_real_distribution<float> enemy_xposition(0.f, 0.f); // 위치 범위 설정
+std::uniform_real_distribution<float> enemy_yposition(0.f, 0.f); // 위치 범위 설정
+
+
+Enemy::Enemy(sf::Vector2u window_size, sf::Vector2f player_position) : radius{enemy_size(gen)}, speed{enemy_speed(gen)}
+{
+    circle.setRadius(radius);
+    circle.setFillColor(sf::Color::Magenta);
+    circle.setOutlineColor(sf::Color::Red);
+    circle.setOutlineThickness(1.0f);
+
+    sf::Vector2f random_position = get_random_position(window_size, player_position);
+    circle.setPosition(random_position);
+}
 
 Enemy::Enemy(const Enemy& other) : circle(other.circle), speed(other.speed), radius(other.radius) {
     sf::Vector2f position = other.circle.getPosition();
@@ -30,7 +45,6 @@ Enemy::Enemy(float radius) : circle({ radius }), radius{ radius }, speed{ enemy_
     circle.setOutlineColor(sf::Color::Red);
     circle.setOutlineThickness(1.0f);
 }
-
 
 Enemy::Enemy() : Enemy(enemy_size(gen)) {}
 //Enemy::Enemy() : Enemy(enemy_size(gen)) { circle.setFillColor(sf::Color(enemy_color(gen), enemy_color(gen), enemy_color(gen))); }
@@ -60,6 +74,34 @@ void Enemy::set_position(sf::Window& window)
 
 
 sf::Vector2f Enemy::get_position() { return circle.getPosition(); }
+
+
+sf::Vector2f Enemy::get_random_position(sf::Vector2u window_size, sf::Vector2f player_position)
+{
+    if (player_position.x <= (float)window_size.x/2 && player_position.y <= (float)window_size.y / 2)
+    {
+        enemy_xposition = std::uniform_real_distribution<float>(window_size.x - 100, window_size.x - 50);
+        enemy_yposition = std::uniform_real_distribution<float>(window_size.y - 100, window_size.y - 50);
+    }
+    else if (player_position.x > (float)window_size.x / 2 && player_position.y < (float)window_size.y / 2)
+    {
+        enemy_xposition = std::uniform_real_distribution<float>(0.f + 50, 0.f + 100);
+        enemy_yposition = std::uniform_real_distribution<float>(window_size.y - 100, window_size.y - 50);
+    }
+    else if (player_position.x < (float)window_size.x / 2 && player_position.y > (float)window_size.y / 2)
+    {
+        enemy_xposition = std::uniform_real_distribution<float>(window_size.x - 100, window_size.x - 50);
+        enemy_yposition = std::uniform_real_distribution<float>(0.f + 50, 0.f + 100);
+    }
+    else if (player_position.x > (float)window_size.x / 2 && player_position.y > (float)window_size.y / 2)
+    {
+        enemy_xposition = std::uniform_real_distribution<float>(0.f + 50, 0.f + 100);
+        enemy_yposition = std::uniform_real_distribution<float>(0.f + 50, 0.f + 100);
+    }
+    return sf::Vector2f(enemy_xposition(gen), enemy_yposition(gen));
+}
+
+
 sf::Vector2f Enemy::get_direction() { return sf::Vector2f(dx, dy); }
 float Enemy::get_distance() { return distance_from_player; }
 float Enemy::get_speed() { return speed; }
