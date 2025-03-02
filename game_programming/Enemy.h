@@ -23,17 +23,12 @@ public:
 
     void set_position(sf::Window& window);
 
-    sf::Vector2f get_position();
-    sf::Vector2f get_direction();
-
+    sf::Vector2f get_position() const;
+    sf::Vector2f get_direction() const;
     sf::Vector2f get_random_position(sf::Vector2u window_size, sf::Vector2f player_position);
 
-    float get_distance();
-    float get_speed();
-
-    
-    
-    void move(sf::Vector2f player_position, Enemy* enemy, int num_enemy, float speed, float deltatime);
+    float get_distance() const;
+    float get_speed() const;
     
     void calculate_direction(sf::Vector2f player_position);
 

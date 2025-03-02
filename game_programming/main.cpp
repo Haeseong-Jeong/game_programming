@@ -40,9 +40,13 @@ int main()
     std::vector<Enemy*> enemies;
     for (int i = 0; i < enemy_num; i++)
     {
-        Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player.get_position()};
+        //Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player.get_position() };
+        //enemies.push_back(enemy);
+        Enemy* enemy = new Enemy;
+        enemy->set_position(window);
         enemies.push_back(enemy);
     }
+
     //for (int i = 0; i < enemy_num; i++) // copy enemy
     //{
     //    Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
@@ -116,7 +120,6 @@ int main()
         for (int i = 0; i < enemies.size(); i++)
         {
             enemies[i]->draw(window); // == (*enemies[i]).draw(window);
-            //enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
             enemies[i]->move(player.get_position(), deltatime);
         }
 
