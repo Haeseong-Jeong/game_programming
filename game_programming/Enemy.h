@@ -10,6 +10,8 @@ private:
     sf::CircleShape circle;
     float speed;
     float radius;
+    float distance_from_player;
+    float dx, dy;
 
 public:
     Enemy(const Enemy& other);
@@ -21,10 +23,14 @@ public:
     void set_position(sf::Window& window);
 
     sf::Vector2f get_position();
+    sf::Vector2f get_direction();
 
+    float get_distance();
     float get_speed();
     
-    void move(sf::Vector2f player_position, Enemy* enemy, int num_enemy, float speed, float deltatime);
+    void calculate_direction(sf::Vector2f player_position);
+
+    void move(sf::Vector2f player_position, float deltatime);
     
     void draw(sf::RenderWindow& window);
 };

@@ -6,13 +6,14 @@
 class Bullet {
 private:
     sf::CircleShape circle;
+    sf::Vector2f direction;
     float speed;
     float radius;
 
 public:
     bool shoot_flag;
 
-    Bullet(sf::Vector2f player_position);
+    Bullet(sf::Vector2f player_position, sf::Vector2f direction);
     Bullet();
 
     //~Bullet();

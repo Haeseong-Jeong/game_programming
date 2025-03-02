@@ -6,7 +6,7 @@
 //	circle.setPosition(player_position);
 //}
 
-Bullet::Bullet(sf::Vector2f player_position) : radius{ 3.0f }, speed{ 550.0f }, shoot_flag{ false } {
+Bullet::Bullet(sf::Vector2f player_position, sf::Vector2f direction) : radius{ 3.0f }, speed{ 550.0f }, direction{ direction } {
 	circle.setRadius(radius);
 	circle.setFillColor(sf::Color::Green);
 	circle.setPosition(player_position);
@@ -34,7 +34,10 @@ sf::Vector2f Bullet::get_position()
 
 void Bullet::shoot(float deltatime)
 {
-	circle.move({ speed * deltatime, 0.0f });
+	//circle.move({ speed * deltatime, 0.0f });
+	//circle.move({ direction * speed * deltatime, direction.y * speed * deltatime });
+	circle.move(-direction*speed*deltatime);
+
 }
 
 void Bullet::draw(sf::RenderWindow& window) { window.draw(circle); }

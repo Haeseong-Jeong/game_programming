@@ -53,8 +53,14 @@ int main()
 
     // defince bullet
     std::vector<Bullet*> bullets;
-    Bullet* bullet = new Bullet(player.get_position()); // input the beginning bullet
-    bullet->shoot_flag = true; 
+    
+    //enemy not move.. so don't have distance and direction
+    for (int i = 0; i < enemies.size(); i++)
+    {
+        enemies[i]->calculate_direction(player.get_position());
+    }
+
+    Bullet* bullet = new Bullet(player.get_position(), player.get_bullet_direction(enemies, enemies.size())); // input the beginning bullet
     bullets.push_back(bullet); 
 
 
@@ -78,10 +84,11 @@ int main()
         player.move_by_mouse(window);
 
 
+        sf::Vector2f direction = player.get_bullet_direction(enemies, enemies.size());
         // judge bullet shoot
         if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period)
         {
-            Bullet* bullet = new Bullet(player.get_position());
+            Bullet* bullet = new Bullet(player.get_position(), direction);
             bullets.push_back(bullet);
             bullet_clock.restart();
         }
@@ -95,7 +102,8 @@ int main()
         for (int i = 0; i < enemies.size(); i++)
         {
             enemies[i]->draw(window); // == (*enemies[i]).draw(window);
-            enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
+            //enemies[i]->move(player.get_position(), enemies[i], enemy_num, enemies[i]->get_speed(), deltatime);
+            enemies[i]->move(player.get_position(), deltatime);
         }
 
         for (int i = 0; i < bullets.size(); i++)

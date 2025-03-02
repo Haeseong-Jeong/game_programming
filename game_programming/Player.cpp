@@ -20,6 +20,24 @@ void Player::set_position(sf::Window& window)
 
 sf::Vector2f Player::get_position() { return rect.getPosition(); }
 
+
+sf::Vector2f Player::get_bullet_direction(std::vector<Enemy*> enemy, int enemy_num)
+{
+    int min_idx = 0;
+    float min_distance = enemy[0]->get_distance();
+    
+    for (int i = 1; i < enemy_num; i++)
+    {
+        float tmp = enemy[i]->get_distance();
+        if (tmp < min_distance)
+        {
+            min_idx = i;
+        }
+    }
+    return enemy[min_idx]->get_direction();
+}
+
+
 void Player::draw(sf::RenderWindow& window) { window.draw(rect); }
 
 void Player::move_by_key(float deltatime)

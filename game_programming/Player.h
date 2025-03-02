@@ -2,6 +2,7 @@
 //#ifndef _Player
 //#define _Player
 
+#include "Enemy.h"
 #include <SFML/Graphics.hpp>
 
 class Player{
@@ -20,6 +21,8 @@ public:
     void set_position(sf::Window& window);
 
     sf::Vector2f get_position();
+
+    sf::Vector2f get_bullet_direction(std::vector<Enemy*> enemy, int enemy_num);
 
     void move_by_key(float deltatime);
 

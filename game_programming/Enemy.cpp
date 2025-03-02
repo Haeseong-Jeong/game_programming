@@ -13,7 +13,7 @@ std::random_device rd;
 std::mt19937 gen(rd()); // 난수 생성 엔진
 std::uniform_int_distribution<int> enemy_color(0, 255); // 색 범위 설정
 //std::uniform_real_distribution<float> enemy_speed(0.01f, 0.05f); // 속도 범위 설정
-std::uniform_real_distribution<float> enemy_speed(50.0f, 100.0f); // 속도 범위 설정
+std::uniform_real_distribution<float> enemy_speed(200.0f, 350.0f); // 속도 범위 설정
 std::uniform_real_distribution<float> enemy_size(5.0f, 10.0f); // 크기 범위 설정
 
 
@@ -60,27 +60,32 @@ void Enemy::set_position(sf::Window& window)
 
 
 sf::Vector2f Enemy::get_position() { return circle.getPosition(); }
-
-
+sf::Vector2f Enemy::get_direction() { return sf::Vector2f(dx, dy); }
+float Enemy::get_distance() { return distance_from_player; }
 float Enemy::get_speed() { return speed; }
 
 
-void Enemy::draw(sf::RenderWindow& window) { window.draw(circle); }
-
-
-void Enemy::move(sf::Vector2f player_position, Enemy* enemy, int num_enemy, float speed, float deltatime)
+void Enemy::calculate_direction(sf::Vector2f player_position)
 {
     //vector = destination - start
-    sf::Vector2f enemy_position = enemy->get_position();
+    //sf::Vector2f enemy_position = enemy->get_position();
+    sf::Vector2f enemy_position = circle.getPosition();
 
-    for (int i = 0; i < num_enemy; i++)
-    {
-        float enemy_to_player_x = player_position.x - enemy_position.x;
-        float enemy_to_player_y = player_position.y - enemy_position.y;
+    float enemy_to_player_x = player_position.x - enemy_position.x;
+    float enemy_to_player_y = player_position.y - enemy_position.y;
 
-        float distance = sqrt(enemy_to_player_x * enemy_to_player_x + enemy_to_player_y * enemy_to_player_y);
+    distance_from_player = sqrt(enemy_to_player_x * enemy_to_player_x + enemy_to_player_y * enemy_to_player_y);
 
-        //enemy.circle.setPosition({ enemy_position.x - enemy_to_player_x / distance * speed, enemy_position.y - enemy_to_player_y / distance * speed });
-        enemy->circle.move({ (enemy_to_player_x / distance) * speed * deltatime, (enemy_to_player_y / distance) * speed * deltatime });
-    }
+    dx = (enemy_to_player_x / distance_from_player);
+    dy = (enemy_to_player_y / distance_from_player);
 }
+
+
+void Enemy::move(sf::Vector2f player_position, float deltatime)
+{
+    //enemy.circle.setPosition({ enemy_position.x - enemy_to_player_x / distance * speed, enemy_position.y - enemy_to_player_y / distance * speed });
+    calculate_direction(player_position);
+    circle.move({ dx * speed * deltatime, dy * speed * deltatime });
+}
+
+void Enemy::draw(sf::RenderWindow& window) { window.draw(circle); }
