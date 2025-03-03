@@ -20,12 +20,11 @@ public:
 
     void set_position(sf::Window& window);
 
+    sf::RectangleShape get_shape();
     sf::Vector2f get_position();
-
     sf::Vector2f get_bullet_direction(std::vector<Enemy*> enemy, int enemy_num);
 
     void move_by_key(float deltatime);
-
     void move_by_mouse(sf::Window& window);
 
     void draw(sf::RenderWindow& window);

@@ -27,6 +27,8 @@ void Bullet::set_position(sf::Vector2f player_position)
 	circle.setPosition(player_position);
 }
 
+sf::CircleShape Bullet::get_shape() { return circle; }
+
 sf::Vector2f Bullet::get_position()
 {
 	return sf::Vector2f(circle.getPosition());

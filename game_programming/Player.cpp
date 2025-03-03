@@ -18,6 +18,8 @@ void Player::set_position(sf::Window& window)
     rect.setPosition({ sf::Vector2f(window_size.x / 2 + width, window_size.y / 2 + height) });
 }
 
+sf::RectangleShape Player::get_shape() { return rect; }
+
 sf::Vector2f Player::get_position() { return rect.getPosition(); }
 
 

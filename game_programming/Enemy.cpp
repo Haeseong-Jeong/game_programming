@@ -75,6 +75,8 @@ void Enemy::set_position(sf::Window& window)
 }
 
 
+sf::CircleShape Enemy::get_shape() { return circle; }
+
 sf::Vector2f Enemy::get_position() const { return circle.getPosition(); }
 
 

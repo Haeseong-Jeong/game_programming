@@ -23,9 +23,11 @@ public:
 
     void set_position(sf::Window& window);
 
+    sf::CircleShape get_shape();
     sf::Vector2f get_position() const;
     sf::Vector2f get_direction() const;
     sf::Vector2f get_random_position(sf::Vector2u window_size, sf::Vector2f player_position);
+
 
     float get_distance() const;
     float get_speed() const;
