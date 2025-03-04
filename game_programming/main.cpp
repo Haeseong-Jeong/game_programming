@@ -24,6 +24,4 @@ int main()
     game_ctrl.initialize_game();
     game_ctrl.running_game(); // set -> update(draw -> move)
     game_ctrl.terminate_game();
-
-
 }

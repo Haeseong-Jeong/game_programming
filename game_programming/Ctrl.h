@@ -16,6 +16,8 @@ public:
 	sf::Vector2f get_bullet_direction();
 	sf::Texture& get_ship_texture();
 	sf::Texture& get_projectile_texture();
+	sf::Window& get_window();
+	Player* get_player_ptr();
 
 	bool initialize_game(); // 
 	void initialize_objects(); // create player, enemy, bullet, window

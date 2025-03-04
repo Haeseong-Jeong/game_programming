@@ -29,29 +29,22 @@ sf::Vector2f Ctrl::get_bullet_direction()
 
 sf::Texture& Ctrl::get_ship_texture() { return ship_texture; }
 sf::Texture& Ctrl::get_projectile_texture() { return projectile_texture; }
+sf::Window& Ctrl::get_window() { return window; }
+Player* Ctrl::get_player_ptr() { return player; }
 
 
 bool Ctrl::initialize_game() 
 {
-    if (ship_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png"))
-    {
-        return false;
-    }
-    if (projectile_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png.png"))
-    {
-        return false;
-    }
-
+    if (!ship_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png")) { return false; }
+    if (!projectile_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png")) { return false; }
     initialize_objects();
     return true;
 }
 
 
-//void Ctrl::initialize_objects(float player_speed, int enemy_gen_num)
 void Ctrl::initialize_objects()
 {
     // define player
-    //player = new Player(player_speed);  //default constructor method no use ()... ->  Player player;
     player = new Player(this, player_size, player_speed);
     player->set_position(window);
 
@@ -59,17 +52,16 @@ void Ctrl::initialize_objects()
     //this->enemy_gen_num = enemy_gen_num;
     for (int i = 0; i < enemy_gen_num; i++)
     {
-        Enemy* enemy = new Enemy; //get ... size, speed, 
-        enemy->set_position(window);
+        Enemy* enemy = new Enemy(this, 3.0f, 350.0f); //get ... size, speed, 
         enemy->coordinate_direction(player->get_position());  //enemy not move.. so don't have distance and direction
         enemies.push_back(enemy);
     }
 
-    for (int i = 0; i < enemy_gen_num; i++) // copy enemy
-    {
-        Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
-        enemies.push_back(enemy2);
-    }
+    //for (int i = 0; i < enemy_gen_num; i++) // copy enemy
+    //{
+    //    Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
+    //    enemies.push_back(enemy2);
+    //}
 
     // defince bullet
     Bullet* bullet = new Bullet(player->get_position(), get_bullet_direction()); // input the beginning bullet
@@ -110,7 +102,8 @@ void Ctrl::set_game()
     {
         for (int i = 0; i < enemy_gen_num; i++)
         {
-            Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player->get_position() };
+            //Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player->get_position() };
+            Enemy* enemy = new Enemy(this, 3.0f, 350.0f);
             enemies.push_back(enemy);
         }
         enemy_clock.restart();
