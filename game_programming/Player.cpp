@@ -1,3 +1,4 @@
+#include "Ctrl.h"
 #include "Player.h"
 #include <cmath>
 #include <random>
@@ -5,12 +6,40 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-Player::Player(float width, float height, float speed) : rect({ width, height }), width{ width }, height{ height }, speed{ speed } {
-    rect.setFillColor(sf::Color::Red);
+
+//Player::Player(Ctrl* game_ctrl, float size, float speed) : game_ctrl{ game_ctrl }, size{ size }, speed{ speed }
+//{
+//    //shape = sf::Sprite shape(game_ctrl->get_ship_texture());
+//    shape.emplace(game_ctrl->get_ship_texture());
+//    //shape->setTextureRect(sf::IntRect(8,0,8,8));
+//    //shape.setScale(sf::Vector2f(size, size));
+//}
+
+//Player::Player(float width, float height, float speed) : rect({ width, height }), width{ width }, height{ height }, speed{ speed } {
+//    rect.setFillColor(sf::Color::Red);
+//}
+//Player::Player(float width, float speed) : Player(width, width, speed) {}
+//Player::Player(float speed) : Player(20.f, 20.f, speed) {}
+//Player::Player() : Player(20.f, 20.f, 0.5f) {}
+
+
+
+//Player::Player(float speed)
+//{
+//    shape = sf::Shape shape()
+//}
+
+Player::Player(Ctrl* game_ctrl, float size, float speed)
+{
 }
-Player::Player(float width, float speed) : Player(width, width, speed) {}
-Player::Player(float speed) : Player(20.f, 20.f, speed) {}
-Player::Player() : Player(20.f, 20.f, 0.5f) {}
+
+Player::Player(float width, float speed)
+{
+}
+
+Player::Player()
+{
+}
 
 void Player::set_position(sf::Window& window)
 {
@@ -18,29 +47,10 @@ void Player::set_position(sf::Window& window)
     rect.setPosition({ sf::Vector2f(window_size.x / 2 + width, window_size.y / 2 + height) });
 }
 
-sf::RectangleShape Player::get_shape() { return rect; }
-
 sf::Vector2f Player::get_position() { return rect.getPosition(); }
 
 
-sf::Vector2f Player::get_bullet_direction(std::vector<Enemy*> enemy, int enemy_num)
-{
-    int min_idx = 0;
-    float min_distance = enemy[0]->get_distance();
-    
-    for (int i = 1; i < enemy_num; i++)
-    {
-        float tmp = enemy[i]->get_distance();
-        if (tmp < min_distance)
-        {
-            min_idx = i;
-        }
-    }
-    return enemy[min_idx]->get_direction();
-}
-
-
-void Player::draw(sf::RenderWindow& window) { window.draw(rect); }
+void Player::draw(sf::RenderWindow& window) { window.draw(*shape); }
 
 void Player::move_by_key(float deltatime)
 {

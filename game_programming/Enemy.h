@@ -11,7 +11,7 @@ private:
     float speed;
     float radius;
     float distance_from_player;
-    float dx, dy;
+    sf::Vector2f direction;
 
 public:
     Enemy(sf::Vector2u window_size, sf::Vector2f player_position);
@@ -23,18 +23,16 @@ public:
 
     void set_position(sf::Window& window);
 
-    sf::CircleShape get_shape();
+    float get_speed() const;
+    float get_distance() const;
+
     sf::Vector2f get_position() const;
     sf::Vector2f get_direction() const;
     sf::Vector2f get_random_position(sf::Vector2u window_size, sf::Vector2f player_position);
 
+    void coordinate_direction(sf::Vector2f player_position);
 
-    float get_distance() const;
-    float get_speed() const;
-    
-    void calculate_direction(sf::Vector2f player_position);
-
-    void move(sf::Vector2f player_position, float deltatime);
+    void move(float deltatime);
     
     void draw(sf::RenderWindow& window);
 };

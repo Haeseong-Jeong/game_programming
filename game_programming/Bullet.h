@@ -11,8 +11,6 @@ private:
     float radius;
 
 public:
-    bool shoot_flag;
-
     Bullet(sf::Vector2f player_position, sf::Vector2f direction);
     Bullet();
 
@@ -20,7 +18,6 @@ public:
 
     void set_position(sf::Vector2f player_position);
 
-    sf::CircleShape get_shape();
     sf::Vector2f get_position();
 
     void shoot(float deltatime);

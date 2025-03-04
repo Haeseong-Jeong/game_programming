@@ -1,7 +1,8 @@
+#include "Enemy.h"
+
 #include <cmath>
 #include <random>
 #include <iostream>
-#include "Enemy.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -11,12 +12,11 @@
 // random engine (전역 변수로 선언하여 여러 객체가 공유 가능)
 std::random_device rd;
 std::mt19937 gen(rd()); // 난수 생성 엔진
-std::uniform_int_distribution<int> enemy_color(0, 255); // 색 범위 설정
-std::uniform_real_distribution<float> enemy_speed(200.0f, 350.0f); // 속도 범위 설정
-std::uniform_real_distribution<float> enemy_size(5.0f, 10.0f); // 크기 범위 설정
-
-std::uniform_real_distribution<float> enemy_xposition(0.f, 0.f); // 위치 범위 설정
-std::uniform_real_distribution<float> enemy_yposition(0.f, 0.f); // 위치 범위 설정
+std::uniform_int_distribution<int> enemy_color(0, 255);             // 색 범위 설정
+std::uniform_real_distribution<float> enemy_speed(200.0f, 350.0f);  // 속도 범위 설정
+std::uniform_real_distribution<float> enemy_size(5.0f, 10.0f);      // 크기 범위 설정
+std::uniform_real_distribution<float> enemy_xposition(0.f, 0.f);    // x 위치 범위 설정
+std::uniform_real_distribution<float> enemy_yposition(0.f, 0.f);    // y 위치 범위 설정
 
 
 Enemy::Enemy(sf::Vector2u window_size, sf::Vector2f player_position) : radius{enemy_size(gen)}, speed{enemy_speed(gen)}
@@ -32,7 +32,7 @@ Enemy::Enemy(sf::Vector2u window_size, sf::Vector2f player_position) : radius{en
 
 
 Enemy::Enemy(const Enemy& other) : 
-    circle(other.circle), speed(other.speed), radius(other.radius), distance_from_player{ other.distance_from_player }, dx{other.dx}, dy{other.dy}
+    circle(other.circle), speed(other.speed), radius(other.radius), distance_from_player{ other.distance_from_player }, direction{other.direction }
 {
     sf::Vector2f position = other.circle.getPosition();
     //circle.setPosition({ position.x + 30, position.y });
@@ -75,10 +75,11 @@ void Enemy::set_position(sf::Window& window)
 }
 
 
-sf::CircleShape Enemy::get_shape() { return circle; }
+float Enemy::get_speed() const { return speed; }
+float Enemy::get_distance() const { return distance_from_player; }
 
 sf::Vector2f Enemy::get_position() const { return circle.getPosition(); }
-
+sf::Vector2f Enemy::get_direction() const { return direction; }
 
 sf::Vector2f Enemy::get_random_position(sf::Vector2u window_size, sf::Vector2f player_position)
 {
@@ -106,32 +107,16 @@ sf::Vector2f Enemy::get_random_position(sf::Vector2u window_size, sf::Vector2f p
 }
 
 
-sf::Vector2f Enemy::get_direction() const { return sf::Vector2f(dx, dy); }
-float Enemy::get_distance() const { return distance_from_player; }
-float Enemy::get_speed() const { return speed; }
-
-
-void Enemy::calculate_direction(sf::Vector2f player_position)
+void Enemy::coordinate_direction(sf::Vector2f player_position)
 {
     //vector = destination - start
-    //sf::Vector2f enemy_position = enemy->get_position();
-    sf::Vector2f enemy_position = circle.getPosition();
-
-    float enemy_to_player_x = player_position.x - enemy_position.x;
-    float enemy_to_player_y = player_position.y - enemy_position.y;
-
-    distance_from_player = sqrt(enemy_to_player_x * enemy_to_player_x + enemy_to_player_y * enemy_to_player_y);
-
-    dx = (enemy_to_player_x / distance_from_player);
-    dy = (enemy_to_player_y / distance_from_player);
+    sf::Vector2f enemy_to_player = player_position - circle.getPosition();
+    distance_from_player = sqrt(enemy_to_player.x * enemy_to_player.x + enemy_to_player.y * enemy_to_player.y);
+    direction = enemy_to_player / distance_from_player;
 }
 
 
-void Enemy::move(sf::Vector2f player_position, float deltatime)
-{
-    //enemy.circle.setPosition({ enemy_position.x - enemy_to_player_x / distance * speed, enemy_position.y - enemy_to_player_y / distance * speed });
-    calculate_direction(player_position);
-    circle.move({ dx * speed * deltatime, dy * speed * deltatime });
-}
+void Enemy::move( float deltatime) { circle.move(direction * speed * deltatime); }
+
 
 void Enemy::draw(sf::RenderWindow& window) { window.draw(circle); }

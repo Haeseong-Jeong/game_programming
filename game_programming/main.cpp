@@ -20,18 +20,10 @@ int main()
     // ****** Detected memory leaks! ******
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    Ctrl game_ctrl = Ctrl(1200,800);
-    game_ctrl.initialize_game(550.f, 5);
-
-    while (game_ctrl.get_window().isOpen()) // 1 -> 2 -> 3 loop
-    {
-        game_ctrl.close_events();
-        game_ctrl.set_game();
-        game_ctrl.update_game();
-
-    }
+    Ctrl game_ctrl = Ctrl(1200,800); //input window size
+    game_ctrl.initialize_game();
+    game_ctrl.running_game(); // set -> update(draw -> move)
     game_ctrl.terminate_game();
 
-    //game_ctrl.running_game();
-    //game_ctrl.terminate_game();
+
 }
