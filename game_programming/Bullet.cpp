@@ -1,31 +1,24 @@
+#include "Ctrl.h"
 #include "Player.h"
 #include "Bullet.h"
 
-//Bullet::Bullet(sf::Vector2f player_position) : circle({ 5.0f }), radius{ 5.0f }, speed{ 550.0f }, shoot_flag{ false }
-//{
-//	circle.setPosition(player_position);
-//}
+Bullet::Bullet(Ctrl* game_ctrl, float size, float speed) 
+	: game_ctrl{ game_ctrl }, size{ size }, speed { speed }, direction{sf::Vector2f(0,0)}
+{
+	sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
+	shape = new sf::Sprite(game_ctrl->get_projectile_texture());
+	shape->setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
+	shape->setScale(sf::Vector2f(size, size));
+	shape->setPosition(player_position);
 
-Bullet::Bullet(sf::Vector2f player_position, sf::Vector2f direction) : radius{ 3.0f }, speed{ 550.0f }, direction{ direction } {
-	circle.setRadius(radius);
-	circle.setFillColor(sf::Color::Green);
-	circle.setPosition(player_position);
+	//shape.emplace(game_ctrl->get_projectile_texture());
+	//shape.value().setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
+	//shape.value().setScale(sf::Vector2f(size, size));
+	//shape.value().setPosition(player_position);
+
+	direction = game_ctrl->get_bullet_direction();
 }
 
-
-Bullet::Bullet() : radius{ 3.0f }, speed{ 550.0f } { 
-	circle.setRadius(radius);
-	circle.setFillColor(sf::Color::Green); 
-}
-
-//Bullet::~Bullet()
-//{
-//}
-
-void Bullet::set_position(sf::Vector2f player_position) { circle.setPosition(player_position); }
-
-sf::Vector2f Bullet::get_position() { return sf::Vector2f(circle.getPosition()); }
-
-void Bullet::shoot(float deltatime) { circle.move(direction*speed*deltatime); }
-
-void Bullet::draw(sf::RenderWindow& window) { window.draw(circle); }
+sf::Vector2f Bullet::get_position() { return sf::Vector2f(shape->getPosition()); }
+void Bullet::shoot(float deltatime) { shape->move(direction*speed*deltatime); }
+void Bullet::draw(sf::RenderWindow& window) { window.draw(*shape); }

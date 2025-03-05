@@ -13,28 +13,12 @@ Player::Player(Ctrl* game_ctrl, float size, float speed) : game_ctrl{ game_ctrl 
     shape->setTextureRect(sf::IntRect({8,0}, {8,8}));
     shape->setScale(sf::Vector2f(size, size));
 
-    //shape = sf::Sprite(game_ctrl->get_ship_texture());     
-    //shape.emplace(game_ctrl->get_ship_texture());   
-    //shape.value().setTextureRect(sf::IntRect({8,0}, {8,8}));
-    //shape.value().setScale(sf::Vector2f(size, size));
-}
-
-//Player::Player(float width, float height, float speed) : rect({ width, height }), width{ width }, height{ height }, speed{ speed } {
-//    rect.setFillColor(sf::Color::Red);
-//}
-//Player::Player(float width, float speed) : Player(width, width, speed) {}
-//Player::Player(float speed) : Player(20.f, 20.f, speed) {}
-//Player::Player() : Player(20.f, 20.f, 0.5f) {}
-
-
-void Player::set_position(sf::Window& window)
-{
-    sf::Vector2u window_size = window.getSize();
+    sf::Vector2u window_size = game_ctrl->get_window().getSize();
     shape->setPosition({ sf::Vector2f(window_size.x / 2 + size, window_size.y / 2 + size) });
 }
 
-sf::Vector2f Player::get_position() { return shape->getPosition(); }
 
+sf::Vector2f Player::get_position() { return shape->getPosition(); }
 
 void Player::draw(sf::RenderWindow& window) { window.draw(*shape); }
 

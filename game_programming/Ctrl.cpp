@@ -46,10 +46,9 @@ void Ctrl::initialize_objects()
 {
     // define player
     player = new Player(this, player_size, player_speed);
-    player->set_position(window);
+    //player->set_position(window);
 
     // define enemy
-    //this->enemy_gen_num = enemy_gen_num;
     for (int i = 0; i < enemy_gen_num; i++)
     {
         Enemy* enemy = new Enemy(this, 3.0f, 350.0f); //get ... size, speed, 
@@ -64,7 +63,7 @@ void Ctrl::initialize_objects()
     //}
 
     // defince bullet
-    Bullet* bullet = new Bullet(player->get_position(), get_bullet_direction()); // input the beginning bullet
+    Bullet* bullet = new Bullet(this, 5.f, 550.f); // input the beginning bullet
     bullets.push_back(bullet);
 }
 
@@ -102,7 +101,6 @@ void Ctrl::set_game()
     {
         for (int i = 0; i < enemy_gen_num; i++)
         {
-            //Enemy* enemy = new Enemy{ sf::Vector2u(window_w, window_h), player->get_position() };
             Enemy* enemy = new Enemy(this, 3.0f, 350.0f);
             enemies.push_back(enemy);
         }
@@ -112,7 +110,7 @@ void Ctrl::set_game()
     // judge bullet shoot
     if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period)
     {
-        Bullet* bullet = new Bullet(player->get_position(), get_bullet_direction());
+        Bullet* bullet = new Bullet(this, 5.f, 550.f);
         bullets.push_back(bullet);
         bullet_clock.restart();
     }
