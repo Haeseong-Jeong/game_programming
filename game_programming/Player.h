@@ -3,29 +3,22 @@
 //#define _Player
 
 //#include "Ctrl.h"
+#include "Object.h"
 #include "Enemy.h"
 #include <SFML/Graphics.hpp>
 
 class Ctrl;
 
-class Player{
-private:
-    // Defined in constructor
-    Ctrl* game_ctrl;
-    sf::Sprite* shape;
-    float size;
-	float speed;
-
+class Player : public Object {
 public:
     Player(Ctrl* game_ctrl, float size, float speed);
-    ~Player() { delete shape; }
+    virtual ~Player();
 
-    sf::Vector2f get_position();
-
-    void move_by_key(float deltatime);
+    virtual void move(float deltatime) override;
     void move_by_mouse(sf::Window& window);
 
-    void draw(sf::RenderWindow& window);
+private:
+
 };
 
 //#endif

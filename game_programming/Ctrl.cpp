@@ -7,8 +7,6 @@ Ctrl::Ctrl(int window_w,int window_h)
     bullets.clear();
 
     enemy_gen_num = 5;
-    player_size = 3.0f;
-    player_speed = 550.0f;
 }
 
 sf::Vector2f Ctrl::get_bullet_direction()
@@ -45,25 +43,23 @@ bool Ctrl::initialize_game()
 void Ctrl::initialize_objects()
 {
     // define player
-    player = new Player(this, player_size, player_speed);
-    //player->set_position(window);
+    Player* player = new Player(this, 3.0f, 550.f);
+    objects.push_back(player);
+    this->player = player;
+
 
     // define enemy
     for (int i = 0; i < enemy_gen_num; i++)
     {
-        Enemy* enemy = new Enemy(this, 3.0f, 350.0f); //get ... size, speed, 
-        enemy->coordinate_direction(player->get_position());  //enemy not move.. so don't have distance and direction
+        Enemy* enemy = new Enemy(this, 3.0f, 350.0f);
+        enemy->coordinate_direction();
         enemies.push_back(enemy);
+        objects.push_back(enemy);
     }
-
-    //for (int i = 0; i < enemy_gen_num; i++) // copy enemy
-    //{
-    //    Enemy* enemy2 = new Enemy(*enemies[i]); //copy constructor, input the pointing data
-    //    enemies.push_back(enemy2);
-    //}
 
     // defince bullet
     Bullet* bullet = new Bullet(this, 5.f, 550.f); // input the beginning bullet
+    objects.push_back(bullet);
     bullets.push_back(bullet);
 }
 
@@ -91,26 +87,25 @@ void Ctrl::process_events()
 void Ctrl::set_game()
 {
     deltatime = clock.restart().asSeconds();
-
-    // press action
-    player->move_by_key(deltatime);
+  
     player->move_by_mouse(window);
 
     // judge enemy gen
-    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period)
-    {
-        for (int i = 0; i < enemy_gen_num; i++)
-        {
-            Enemy* enemy = new Enemy(this, 3.0f, 350.0f);
-            enemies.push_back(enemy);
-        }
-        enemy_clock.restart();
-    }
+    //if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period)
+    //{
+    //    for (int i = 0; i < enemy_gen_num; i++)
+    //    {
+    //        Enemy* enemy = new Enemy(this, 3.0f, 350.0f);
+    //        enemies.push_back(enemy);
+    //    }
+    //    enemy_clock.restart();
+    //}
 
     // judge bullet shoot
     if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period)
     {
         Bullet* bullet = new Bullet(this, 5.f, 550.f);
+        objects.push_back(bullet);
         bullets.push_back(bullet);
         bullet_clock.restart();
     }
@@ -121,21 +116,13 @@ void Ctrl::update_game()
     // 1. Clear screen
     window.clear();
 
-    // 2. Draw player, enemy, bullet
-    player->draw(window);
+    // 2. Draw and Move object 
+    for (int i = 0; i < objects.size(); i++)
+    {
+        objects[i]->draw(window);
+        objects[i]->move(deltatime);
+    }
 
-    for (int i = 0; i < enemies.size(); i++)
-    {
-        enemies[i]->draw(window); // == (*enemies[i]).draw(window);
-        enemies[i]->coordinate_direction(player->get_position());
-        enemies[i]->move(deltatime);
-    }
-    
-    for (int i = 0; i < bullets.size(); i++)
-    {
-        bullets[i]->draw(window);
-        bullets[i]->shoot(deltatime);
-    }
     // bullet remove within boundary  *** rambda capture!! we have to use outter value (window_w). so, use [&] not []!!
     std::erase_if(bullets, [&](Bullet* bullet) { return bullet->get_position().x > window_w; });
 
@@ -146,14 +133,8 @@ void Ctrl::update_game()
 
 void Ctrl::terminate_game()
 {
-    // delete new memory
-    for (int i = 0; i < enemies.size(); i++)
+    for (int i = 0; i < objects.size(); i++)
     {
-        delete enemies[i];
+        delete objects[i];
     }
-    for (int i = 0; i < bullets.size(); i++)
-    {
-        delete bullets[i];
-    }
-    delete player;
 }

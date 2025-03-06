@@ -6,8 +6,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-
-Player::Player(Ctrl* game_ctrl, float size, float speed) : game_ctrl{ game_ctrl }, size{ size }, speed{ speed }
+Player::Player(Ctrl* game_ctrl, float size, float speed) : Object{ game_ctrl,size,speed }
 {
     shape = new sf::Sprite(game_ctrl->get_ship_texture());
     shape->setTextureRect(sf::IntRect({8,0}, {8,8}));
@@ -17,12 +16,10 @@ Player::Player(Ctrl* game_ctrl, float size, float speed) : game_ctrl{ game_ctrl 
     shape->setPosition({ sf::Vector2f(window_size.x / 2 + size, window_size.y / 2 + size) });
 }
 
+Player::~Player() {}
 
-sf::Vector2f Player::get_position() { return shape->getPosition(); }
 
-void Player::draw(sf::RenderWindow& window) { window.draw(*shape); }
-
-void Player::move_by_key(float deltatime)
+void Player::move(float deltatime)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
         shape->move({ -speed * deltatime, 0.f });

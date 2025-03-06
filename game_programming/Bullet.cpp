@@ -1,9 +1,9 @@
 #include "Ctrl.h"
 #include "Player.h"
 #include "Bullet.h"
+#include <iostream>
 
-Bullet::Bullet(Ctrl* game_ctrl, float size, float speed) 
-	: game_ctrl{ game_ctrl }, size{ size }, speed { speed }, direction{sf::Vector2f(0,0)}
+Bullet::Bullet(Ctrl* game_ctrl, float size, float speed) : Object{ game_ctrl,size,speed }
 {
 	sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
 	shape = new sf::Sprite(game_ctrl->get_projectile_texture());
@@ -19,6 +19,16 @@ Bullet::Bullet(Ctrl* game_ctrl, float size, float speed)
 	direction = game_ctrl->get_bullet_direction();
 }
 
-sf::Vector2f Bullet::get_position() { return sf::Vector2f(shape->getPosition()); }
-void Bullet::shoot(float deltatime) { shape->move(direction*speed*deltatime); }
-void Bullet::draw(sf::RenderWindow& window) { window.draw(*shape); }
+Bullet::~Bullet()
+{
+}
+
+void Bullet::move(float deltatime) { shape->move(direction*speed*deltatime); }
+
+//void Bullet::remove()
+//{
+//	std::erase_if(bullets, [&](Bullet* bullet) { return bullet->get_position().x > window_w; });
+//
+//	std::erase_if(game_ctrl.get, [&](Bullet* bullet) { return bullet->get_position().x > window_w; });
+//
+//}

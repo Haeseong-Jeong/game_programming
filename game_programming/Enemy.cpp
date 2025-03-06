@@ -12,7 +12,7 @@ std::random_device rd;
 std::mt19937 gen(rd()); // 난수 생성 엔진
 std::uniform_int_distribution<int> dist(0, 1);  // 0 또는 1
 
-Enemy::Enemy(Ctrl* game_ctrl, float max_size, float max_speed) : game_ctrl{ game_ctrl }
+Enemy::Enemy(Ctrl* game_ctrl, float max_size, float max_speed) : Object{ game_ctrl,size,speed }
 {
     sf::Vector2u window_size = game_ctrl->get_window().getSize();
     std::uniform_real_distribution<float> enemy_size(max_size / 2, max_size);
@@ -23,7 +23,11 @@ Enemy::Enemy(Ctrl* game_ctrl, float max_size, float max_speed) : game_ctrl{ game
     shape = new sf::Sprite(game_ctrl->get_ship_texture());
     shape->setTextureRect(sf::IntRect({ 40,0 }, { 8,8 }));
     shape->setScale(sf::Vector2f(size, size));
-    shape->setPosition(get_random_position());
+    shape->setPosition(get_spawn_position());
+}
+
+Enemy::~Enemy()
+{
 }
 
 Enemy& Enemy::operator=(const Enemy& other)
@@ -34,17 +38,15 @@ Enemy& Enemy::operator=(const Enemy& other)
         speed = other.speed;
         size = other.size;
 
-        shape->setPosition(get_random_position());
+        shape->setPosition(get_spawn_position());
     }
     return *this;
 }
 
-float Enemy::get_speed() const { return speed; }
+
 float Enemy::get_distance() const { return distance_from_player; }
 
-sf::Vector2f Enemy::get_position() const { return shape->getPosition(); }
 sf::Vector2f Enemy::get_direction() const { return direction; }
-
 
 sf::Vector2f Enemy::gen_random_position(float min_x, float max_x, float min_y, float max_y)
 {
@@ -54,7 +56,7 @@ sf::Vector2f Enemy::gen_random_position(float min_x, float max_x, float min_y, f
 }
 
 
-sf::Vector2f Enemy::get_random_position()
+sf::Vector2f Enemy::get_spawn_position()
 {
     sf::Vector2u window_size = game_ctrl->get_window().getSize();
     sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
@@ -86,15 +88,22 @@ sf::Vector2f Enemy::get_random_position()
 }
 
 
-void Enemy::coordinate_direction(sf::Vector2f player_position)
+void Enemy::coordinate_direction()
 {
     //vector = destination - start
+    sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
     sf::Vector2f enemy_to_player = player_position - shape->getPosition();
     distance_from_player = sqrt(enemy_to_player.x * enemy_to_player.x + enemy_to_player.y * enemy_to_player.y);
     direction = enemy_to_player / distance_from_player;
 }
 
 
-void Enemy::move( float deltatime) { shape->move(direction * speed * deltatime); }
+void Enemy::move(float deltatime)
+{
+    coordinate_direction();
+    shape->move(direction * speed * deltatime); 
+}
 
-void Enemy::draw(sf::RenderWindow& window) { window.draw(*shape); }
+//void Enemy::remove()
+//{
+//}

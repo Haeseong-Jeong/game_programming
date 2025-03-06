@@ -1,28 +1,20 @@
 #pragma once
 
+#include "Object.h"
 #include "Player.h"
 #include <SFML/Graphics.hpp>
 
 class Ctrl;
 
-class Bullet {
-private:
-    // Defined in constructor
-    //std::optional<sf::Sprite> shape;  // 선택적으로 생성 가능
-    Ctrl* game_ctrl;
-    sf::Sprite* shape;
-    float speed;
-    float size;
-    sf::Vector2f direction;
-
+class Bullet : public Object {
 public:
     Bullet(Ctrl* game_ctrl, float size, float speed);
-    ~Bullet() { delete shape; };
+    virtual ~Bullet();
 
-    sf::Vector2f get_position();
+    virtual void move(float deltatime) override;
+    //virtual void remove() override;
 
-    void shoot(float deltatime);
-
-    void draw(sf::RenderWindow& window);
+private:
+    sf::Vector2f direction;
 };
 

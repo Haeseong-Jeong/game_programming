@@ -1,6 +1,7 @@
 #pragma once
 
 //#include "Player.h"
+#include "Object.h"
 #include "Bullet.h"
 #include <SFML/Graphics.hpp>
 
@@ -16,6 +17,7 @@ public:
 	sf::Vector2f get_bullet_direction();
 	sf::Texture& get_ship_texture();
 	sf::Texture& get_projectile_texture();
+
 	sf::Window& get_window();
 	Player* get_player_ptr();
 
@@ -38,9 +40,8 @@ private:
 	sf::Texture projectile_texture;
 
 	int enemy_gen_num;
-	float player_speed;
-	float player_size;
 
+	std::vector<Object*> objects;
 	Player* player;
 	std::vector<Enemy*> enemies;
 	std::vector<Bullet*> bullets;
