@@ -1,16 +1,15 @@
 #include "Ctrl.h"
 #include "Player.h"
-#include <cmath>
-#include <random>
 #include <iostream>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-Player::Player(Ctrl* game_ctrl, float size, float speed) : Object{ game_ctrl,size,speed }
+Player::Player(Ctrl* game_ctrl, ObjectType type, float size, float speed) : Object{ game_ctrl, type, size, speed }
 {
     shape = new sf::Sprite(game_ctrl->get_ship_texture());
     shape->setTextureRect(sf::IntRect({8,0}, {8,8}));
-    shape->setScale(sf::Vector2f(size, size));
+    //shape->setScale(sf::Vector2f(size, size));
+    shape->scale(sf::Vector2f(size, size));
 
     sf::Vector2u window_size = game_ctrl->get_window().getSize();
     shape->setPosition({ sf::Vector2f(window_size.x / 2 + size, window_size.y / 2 + size) });

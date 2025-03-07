@@ -12,7 +12,7 @@ std::random_device rd;
 std::mt19937 gen(rd()); // 난수 생성 엔진
 std::uniform_int_distribution<int> dist(0, 1);  // 0 또는 1
 
-Enemy::Enemy(Ctrl* game_ctrl, float max_size, float max_speed) : Object{ game_ctrl,size,speed }
+Enemy::Enemy(Ctrl* game_ctrl, ObjectType type, float max_size, float max_speed) : Object{ game_ctrl, type, size, speed }
 {
     sf::Vector2u window_size = game_ctrl->get_window().getSize();
     std::uniform_real_distribution<float> enemy_size(max_size / 2, max_size);
@@ -23,12 +23,13 @@ Enemy::Enemy(Ctrl* game_ctrl, float max_size, float max_speed) : Object{ game_ct
     shape = new sf::Sprite(game_ctrl->get_ship_texture());
     shape->setTextureRect(sf::IntRect({ 40,0 }, { 8,8 }));
     shape->setScale(sf::Vector2f(size, size));
+    //shape->scale(sf::Vector2f(size, size));
+
     shape->setPosition(get_spawn_position());
+    coordinate_direction();
 }
 
-Enemy::~Enemy()
-{
-}
+Enemy::~Enemy() {}
 
 Enemy& Enemy::operator=(const Enemy& other)
 {
@@ -43,18 +44,12 @@ Enemy& Enemy::operator=(const Enemy& other)
     return *this;
 }
 
-
-float Enemy::get_distance() const { return distance_from_player; }
-
-sf::Vector2f Enemy::get_direction() const { return direction; }
-
 sf::Vector2f Enemy::gen_random_position(float min_x, float max_x, float min_y, float max_y)
 {
     std::uniform_real_distribution<float> x_position(min_x, max_x);
     std::uniform_real_distribution<float> y_position(min_y, max_y);
     return sf::Vector2f(x_position(gen), y_position(gen));
 }
-
 
 sf::Vector2f Enemy::get_spawn_position()
 {
@@ -63,26 +58,26 @@ sf::Vector2f Enemy::get_spawn_position()
 
     if (player_position.x <= (float)window_size.x/2 && player_position.y <= (float)window_size.y / 2) // 1사분면
     {
-        sf::Vector2f pos_1 = gen_random_position(window_size.x - 100, window_size.x - 50, 50, window_size.y - 50);
-        sf::Vector2f pos_2 = gen_random_position(50, window_size.x - 50, window_size.y - 100, window_size.y - 50);
+        sf::Vector2f pos_1 = gen_random_position(window_size.x, window_size.x + 50, -50, window_size.y + 50);
+        sf::Vector2f pos_2 = gen_random_position(-50, window_size.x + 50, window_size.y, window_size.y + 50);
         return dist(gen) ? pos_1 : pos_2;
     }
     else if (player_position.x > (float)window_size.x / 2 && player_position.y < (float)window_size.y / 2) // 2사분면
     {
-        sf::Vector2f pos_1 = gen_random_position(50, 100, 50, window_size.y - 50);
-        sf::Vector2f pos_2 = gen_random_position(50, window_size.x - 50, window_size.y - 100, window_size.y - 50);
+        sf::Vector2f pos_1 = gen_random_position(-50, 0, -50, window_size.y + 50);
+        sf::Vector2f pos_2 = gen_random_position(-50, window_size.x + 50, window_size.y, window_size.y + 50);
         return dist(gen) ? pos_1 : pos_2;
     }
     else if (player_position.x < (float)window_size.x / 2 && player_position.y > (float)window_size.y / 2) // 3사분면
     {
-        sf::Vector2f pos_1 = gen_random_position(window_size.x - 100, window_size.x - 50, 50, window_size.y - 50);
-        sf::Vector2f pos_2 = gen_random_position(50, window_size.x - 50, 50, 100);
+        sf::Vector2f pos_1 = gen_random_position(window_size.x, window_size.x + 50, -50, window_size.y + 50);
+        sf::Vector2f pos_2 = gen_random_position(-50, window_size.x + 50, -50, 0);
         return dist(gen) ? pos_1 : pos_2;
     }
     else if (player_position.x > (float)window_size.x / 2 && player_position.y > (float)window_size.y / 2) // 4사분면
     {
-        sf::Vector2f pos_1 = gen_random_position(50, 100, 50, window_size.y - 50);
-        sf::Vector2f pos_2 = gen_random_position(50, window_size.x - 50, 50, 100);
+        sf::Vector2f pos_1 = gen_random_position(-50, 0, -50, window_size.y + 50);
+        sf::Vector2f pos_2 = gen_random_position(-50, window_size.x + 50, -50, 0);
         return dist(gen) ? pos_1 : pos_2;
     }
 }
@@ -94,6 +89,7 @@ void Enemy::coordinate_direction()
     sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
     sf::Vector2f enemy_to_player = player_position - shape->getPosition();
     distance_from_player = sqrt(enemy_to_player.x * enemy_to_player.x + enemy_to_player.y * enemy_to_player.y);
+    if (distance_from_player < game_ctrl->EPSILON) { distance_from_player = game_ctrl->EPSILON; }
     direction = enemy_to_player / distance_from_player;
 }
 
@@ -103,7 +99,3 @@ void Enemy::move(float deltatime)
     coordinate_direction();
     shape->move(direction * speed * deltatime); 
 }
-
-//void Enemy::remove()
-//{
-//}

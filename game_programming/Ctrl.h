@@ -12,14 +12,24 @@ class Bullet;
 class Ctrl
 {
 public:
+	const float EPSILON = 1e-6f;
+
+public:
 	Ctrl(int window_w, int window_h);
 	//~Ctrl();
-	sf::Vector2f get_bullet_direction();
+
 	sf::Texture& get_ship_texture();
 	sf::Texture& get_projectile_texture();
-
 	sf::Window& get_window();
 	Player* get_player_ptr();
+	std::vector<Object*> get_objects();
+	
+	bool check_collision(Object* a, Object* b);
+	void is_hit();
+	void is_out_boundary();
+
+	void spwan_enemy();
+	void spwan_bullet();
 
 	bool initialize_game(); // 
 	void initialize_objects(); // create player, enemy, bullet, window
@@ -40,11 +50,8 @@ private:
 	sf::Texture projectile_texture;
 
 	int enemy_gen_num;
-
-	std::vector<Object*> objects;
 	Player* player;
-	std::vector<Enemy*> enemies;
-	std::vector<Bullet*> bullets;
+	std::vector<Object*> objects;
 
 	sf::Clock clock;
 	sf::Clock enemy_clock;
