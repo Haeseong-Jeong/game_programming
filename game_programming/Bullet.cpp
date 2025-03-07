@@ -7,12 +7,17 @@ Bullet::Bullet(Ctrl* game_ctrl, ObjectType type, float size, float speed) : Obje
 {
 	sf::Vector2f player_position = game_ctrl->get_player_ptr()->get_position();
 	shape = new sf::Sprite(game_ctrl->get_projectile_texture());
-	shape->setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
-	shape->setScale(sf::Vector2f(size, size));
+	//shape->setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
+    shape->setTextureRect(sf::IntRect({ 26,27 }, { 3,3 }));
+    shape->setScale(sf::Vector2f(size, size));
     //shape->scale(sf::Vector2f(size, size));
 
 	shape->setPosition(player_position);
 	direction = get_bullet_direction();
+    if (direction == sf::Vector2f(0,0)) { activate = false; }
+
+    make_bounding_box();
+    make_skeleton(0.6);
 }
 Bullet::~Bullet() {}
 
@@ -44,4 +49,9 @@ sf::Vector2f Bullet::get_bullet_direction()
     return min_dist_direction;
 }
 
-void Bullet::move(float deltatime) { shape->move(direction * speed * deltatime); }
+void Bullet::move(float deltatime) 
+{ 
+    shape->move(direction * speed * deltatime); 
+
+    //bounding_box.move(direction * speed * deltatime);
+}

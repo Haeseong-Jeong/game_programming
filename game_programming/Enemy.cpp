@@ -21,12 +21,15 @@ Enemy::Enemy(Ctrl* game_ctrl, ObjectType type, float max_size, float max_speed) 
     speed = enemy_speed(gen);
 
     shape = new sf::Sprite(game_ctrl->get_ship_texture());
-    shape->setTextureRect(sf::IntRect({ 40,0 }, { 8,8 }));
+    //shape->setTextureRect(sf::IntRect({ 40,0 }, { 8,8 }));
+    shape->setTextureRect(sf::IntRect({ 40,2 }, { 7,5 }));
     shape->setScale(sf::Vector2f(size, size));
-    //shape->scale(sf::Vector2f(size, size));
 
     shape->setPosition(get_spawn_position());
     coordinate_direction();
+
+    make_bounding_box();
+    make_skeleton(0.6);
 }
 
 Enemy::~Enemy() {}
@@ -98,4 +101,6 @@ void Enemy::move(float deltatime)
 {
     coordinate_direction();
     shape->move(direction * speed * deltatime); 
+
+    //bounding_box.move(direction * speed * deltatime);
 }

@@ -8,29 +8,17 @@ Ctrl::Ctrl(int window_w,int window_h)
     enemy_gen_num = 5;
 }
 
+sf::Window& Ctrl::get_window() { return window; }
 sf::Texture& Ctrl::get_ship_texture() { return ship_texture; }
 sf::Texture& Ctrl::get_projectile_texture() { return projectile_texture; }
-sf::Window& Ctrl::get_window() { return window; }
+
 Player* Ctrl::get_player_ptr() { return player; }
 std::vector<Object*> Ctrl::get_objects() { return objects; }
 
+
 bool Ctrl::check_collision(Object* e, Object* b) 
-{
-    //sf::FloatRect elocalBounds = e->get_shape()->getLocalBounds(); // 원본 텍스처 크기
-    //e->get_shape()->getTransform().transformRect(elocalBounds); // 실제 적용된 크기로 변환
-
-    //sf::FloatRect blocalBounds = b->get_shape()->getLocalBounds(); // 원본 텍스처 크기
-    //b->get_shape()->getTransform().transformRect(blocalBounds); // 실제 적용된 크기로 변환
-
-
-    //sf::FloatRect enemyBounds = e->get_shape()->getGlobalBounds();
-    //sf::FloatRect bulletBounds = b->get_shape()->getGlobalBounds();
-
-    //std::optional<sf::Rect<float>> is_intersection = enemyBounds.findIntersection(bulletBounds);
-    //std::optional<sf::Rect<float>> is_intersection = e->get_shape()->getGlobalBounds().findIntersection(b->get_shape()->getGlobalBounds());
-    std::optional<sf::Rect<int>> is_intersection = e->get_shape()->getTextureRect().findIntersection(b->get_shape()->getTextureRect());
-
-
+{   
+    std::optional<sf::Rect<float>> is_intersection = e->skeleton.getGlobalBounds().findIntersection(b->skeleton.getGlobalBounds());
     return is_intersection.has_value();
 }
 
@@ -43,7 +31,6 @@ void Ctrl::is_hit()
             for (int j = 0; j < objects.size(); j++)
             {
                 if (objects[j]->get_type() != ObjectType::ENEMY) { continue; }
-
                 if (check_collision(objects[i], objects[j]))
                 {
                     objects[i]->deactivate();
@@ -54,32 +41,6 @@ void Ctrl::is_hit()
         }
     }
 }
-
-//void Ctrl::is_hit_distance()
-//{
-//    for (int i = 0; i < objects.size(); i++)
-//    {
-//        if (objects[i]->get_type() == ObjectType::BULLET)
-//        {
-//            for (int j = 0; j < objects.size(); j++)
-//            {
-//                if (objects[j]->get_type() != ObjectType::ENEMY) { continue; }
-//
-//                sf::Vector2f bullet_pos = objects[i]->get_position();
-//                sf::Vector2f enemy_pos = objects[j]->get_position();
-//                sf::Vector2f bullet_to_enemy = enemy_pos - bullet_pos;
-//                float dist = sqrt(bullet_to_enemy.x * bullet_to_enemy.x + bullet_to_enemy.y * bullet_to_enemy.y);
-//                
-//                if (dist < 5.0f)
-//                {
-//                    objects[i]->deactivate();
-//                    objects[j]->deactivate();
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//}
 
 
 void Ctrl::is_out_boundary()
@@ -182,6 +143,8 @@ void Ctrl::update_game()
     {
         objects[i]->draw(window);
         objects[i]->move(deltatime);
+        objects[i]->make_bounding_box();
+        objects[i]->make_skeleton(0.6);
     }
 
     is_hit();// 피격 판정
