@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Enemy.h"
-#include "Object.h"
+#include "Object/Object.h"
 #include <SFML/Graphics.hpp>
 
-class Ctrl;
+class Game;
+//class ObjectManager;
 
 class Player : public Object {
 public:
-    Player(Ctrl* game_ctrl, ObjectType type, float size, float speed);
+    Player(Game* game, ObjectType type, float size, float speed);
+    Player(sf::Texture& texture, ObjectType type, float size, float speed);
+
     virtual ~Player();
 
     virtual void move(float deltatime) override;

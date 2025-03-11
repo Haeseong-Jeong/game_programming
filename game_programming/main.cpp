@@ -7,7 +7,8 @@
 #define DBG_NEW new
 #endif
 
-#include "Ctrl.h"
+#include "Game/Game.h"
+
 #include <cmath>
 #include <random>
 #include <vector>
@@ -20,10 +21,11 @@ int main()
     // ****** Detected memory leaks! ******
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    Ctrl game_ctrl = Ctrl(1200,800); //input window size
-    game_ctrl.initialize_game();
-    game_ctrl.running_game(); // set -> update(draw -> move)
-    game_ctrl.terminate_game();
+    //Game game;
+    Game game = Game(1200,800); //input window size
+    game.initialize_game();
+    game.running_game(); // set -> update(draw -> move)
+    game.terminate_game();
 
     //sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "Sprite Bounding Box");
 

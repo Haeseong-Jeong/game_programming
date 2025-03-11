@@ -1,28 +1,31 @@
-#include "Ctrl.h"
+#include "Game/Game.h"
+
 #include <iostream>
 
-Ctrl::Ctrl(int window_w,int window_h) 
-    : window_w{ window_w }, window_h{ window_h }, window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "Game play"), player{nullptr}
+Game::Game(int window_w,int window_h) 
+    : window_w{ window_w }, window_h{ window_h }, window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "Game play"), player{ nullptr }
 {
-    objects.clear();
+    obm = new ObjectManager();
+
+    //objects.clear();
     enemy_gen_num = 5;
 }
 
-sf::Window& Ctrl::get_window() { return window; }
-sf::Texture& Ctrl::get_ship_texture() { return ship_texture; }
-sf::Texture& Ctrl::get_projectile_texture() { return projectile_texture; }
+sf::Window& Game::get_window() { return window; }
+sf::Texture& Game::get_ship_texture() { return ship_texture; }
+sf::Texture& Game::get_projectile_texture() { return projectile_texture; }
 
-Player* Ctrl::get_player_ptr() { return player; }
-std::vector<Object*> Ctrl::get_objects() { return objects; }
+Player* Game::get_player_ptr() { return player; }
+std::vector<Object*> Game::get_objects() { return objects; }
 
 
-bool Ctrl::check_collision(Object* e, Object* b) 
+bool Game::check_collision(Object* e, Object* b) 
 {   
     std::optional<sf::Rect<float>> is_intersection = e->skeleton.getGlobalBounds().findIntersection(b->skeleton.getGlobalBounds());
     return is_intersection.has_value();
 }
 
-void Ctrl::is_hit()
+void Game::is_hit()
 {
     for (int i = 0; i < objects.size(); i++)
     {
@@ -43,7 +46,7 @@ void Ctrl::is_hit()
 }
 
 
-void Ctrl::is_out_boundary()
+void Game::is_out_boundary()
 {
     for (int i = 0; i < objects.size(); i++)
     {
@@ -53,32 +56,36 @@ void Ctrl::is_out_boundary()
     }
 }
 
-void Ctrl::spwan_enemy()
+void Game::spwan_enemy()
 {
-    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period)
+    static bool first_spwan = true;
+    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
     {
         for (int i = 0; i < enemy_gen_num; i++)
         {
             Enemy* enemy = new Enemy(this, ObjectType::ENEMY, 3.0f, 350.0f);
             objects.push_back(enemy);
         }
+        first_spwan = false;
         enemy_clock.restart();
     }
 }
 
 
-void Ctrl::spwan_bullet()
+void Game::spwan_bullet()
 {
-    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period)
+    static bool first_spwan = true;
+    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
     {
         Bullet* bullet = new Bullet(this, ObjectType::BULLET, 5.f, 550.f);
         objects.push_back(bullet);
+        first_spwan = false;
         bullet_clock.restart();
     }
 }
 
 
-bool Ctrl::initialize_game() 
+bool Game::initialize_game() 
 {
     if (!ship_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png")) { return false; }
     if (!projectile_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png")) { return false; }
@@ -87,23 +94,18 @@ bool Ctrl::initialize_game()
 }
 
 
-void Ctrl::initialize_objects()
+void Game::initialize_objects()
 {
     Player* player = new Player(this, ObjectType::PLAYER, 3.0f, 550.f);
     objects.push_back(player);
+    //obm->get_objects().push_back();
     this->player = player;
 
-    for (int i = 0; i < enemy_gen_num; i++)
-    {
-        Enemy* enemy = new Enemy(this, ObjectType::ENEMY, 3.0f, 350.0f);
-        objects.push_back(enemy);
-    }
-
-    Bullet* bullet = new Bullet(this, ObjectType::BULLET, 5.f, 550.f);
-    objects.push_back(bullet);
+    //spwan_enemy();
+    //spwan_bullet();
 }
 
-void Ctrl::running_game()
+void Game::running_game()
 {
     while (window.isOpen())
     {
@@ -113,7 +115,7 @@ void Ctrl::running_game()
     }
 }
 
-void Ctrl::process_events()
+void Game::process_events()
 {
     // Process events
     while (const std::optional event = window.pollEvent())
@@ -124,16 +126,18 @@ void Ctrl::process_events()
     }
 }
 
-void Ctrl::set_game()
+void Game::set_game()
 {
     deltatime = clock.restart().asSeconds();
     player->move_by_mouse(window);
 
     spwan_enemy();
     spwan_bullet();
+    //obm->spwan_enemy();
+    //obm->spwan_bullet();
 }
 
-void Ctrl::update_game()
+void Game::update_game()
 {
     // 1. Clear screen
     window.clear();
@@ -156,7 +160,7 @@ void Ctrl::update_game()
 }
 
 
-void Ctrl::terminate_game()
+void Game::terminate_game()
 {
     for (int i = 0; i < objects.size(); i++)
     {

@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Object.h"
+#include "Object/Object.h"
 #include <SFML/Graphics.hpp>
 
-class Ctrl;
+class Game;
 
 class Enemy : public Object {
 public:
-    Enemy(Ctrl* game_ctrl, ObjectType type, float max_size, float max_speed);
+    Enemy(Game* game, ObjectType type, float max_size, float max_speed);
+    Enemy(ObjectType type, float max_size, float max_speed);
+
     virtual ~Enemy();
 
     //Enemy(const Enemy& other);

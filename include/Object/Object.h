@@ -4,7 +4,8 @@
 
 enum ObjectType { PLAYER, ENEMY, BULLET };
 
-class Ctrl;
+class Game;
+class ObjectManager;
 
 class Object
 {
@@ -13,7 +14,9 @@ public:
 	sf::RectangleShape skeleton;
 
 public:
-	Object(Ctrl* game_ctrl, ObjectType type,float size, float speed);
+	Object(Game* game, ObjectType type, float size, float speed);
+	Object(ObjectType type, float size, float speed);
+
 	virtual ~Object();
 
 	sf::Vector2f get_position();
@@ -31,7 +34,8 @@ public:
 
 
 protected:
-	Ctrl* game_ctrl;
+	Game* game;
+	ObjectManager obm;
 	sf::Sprite* shape;
 	ObjectType type;
 	bool activate;

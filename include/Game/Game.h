@@ -1,20 +1,25 @@
 #pragma once
 
-#include "Object.h"
-#include "Bullet.h"
+#include "Object/Object.h"
+#include "Object/Player.h"
+#include "Object/Enemy.h"
+#include "Object/Bullet.h"
+
+#include "Game/ObjectManager.h"
+
 #include <SFML/Graphics.hpp>
 
 class Player;
 class Enemy;
 class Bullet;
 
-class Ctrl
+class Game
 {
 public:
 	const float EPSILON = 1e-6f;
 
 public:
-	Ctrl(int window_w, int window_h);
+	Game(int window_w, int window_h);
 	//~Ctrl();
 
 	sf::Window& get_window();
@@ -48,6 +53,8 @@ private:
 
 	sf::Texture ship_texture;
 	sf::Texture projectile_texture;
+
+	ObjectManager* obm;
 
 	int enemy_gen_num;
 	Player* player;

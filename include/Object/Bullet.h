@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Object.h"
-#include "Player.h"
+#include "Object/Object.h"
 #include <SFML/Graphics.hpp>
 
-class Ctrl;
+class Game;
 
 class Bullet : public Object {
 public:
-    Bullet(Ctrl* game_ctrl, ObjectType type, float size, float speed);
+    Bullet(Game* game, ObjectType type, float size, float speed);
     virtual ~Bullet();
 
     sf::Vector2f get_bullet_direction();

@@ -1,10 +1,15 @@
-#include "Ctrl.h"
-#include "Object.h"
+#include "Game/Game.h"
+#include "Game/ObjectManager.h"
+#include "Object/Object.h"
 
-Object::Object(Ctrl* game_ctrl, ObjectType type, float size, float speed)
-    : game_ctrl{ game_ctrl }, size{ size }, speed{ speed }, type{ type }, activate{ true }
+Object::Object(Game* game, ObjectType type, float size, float speed)
+    : game{ game }, size{ size }, speed{ speed }, type{ type }, activate{ true }
+{       
+}
+
+Object::Object(ObjectType type, float size, float speed)
+    : size{ size }, speed{ speed }, type{ type }, activate{ true }
 {
-        
 }
 
 Object::~Object() { delete shape; }
