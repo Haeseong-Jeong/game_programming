@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Object/Object.h"
+#include "Entity/Entity.h"
 #include <SFML/Graphics.hpp>
 
 class Game;
 
-class Bullet : public Object {
+class Bullet : public Entity {
 public:
-    Bullet(Game* game, ObjectType type, float size, float speed);
+    Bullet(Game* game, EntityType type, float size, float speed);
     virtual ~Bullet();
 
     sf::Vector2f get_bullet_direction();

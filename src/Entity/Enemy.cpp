@@ -1,4 +1,4 @@
-#include "Object/Enemy.h"
+#include "Entity/Enemy.h"
 #include "Game/Game.h"
 
 #include <cmath>
@@ -12,7 +12,7 @@ std::random_device rd;
 std::mt19937 gen(rd()); // 난수 생성 엔진
 std::uniform_int_distribution<int> dist(0, 1);  // 0 또는 1
 
-Enemy::Enemy(Game* game, ObjectType type, float max_size, float max_speed) : Object{ game, type, size, speed }
+Enemy::Enemy(Game* game, EntityType type, float max_size, float max_speed) : Entity{ game, type, size, speed }
 {
     sf::Vector2u window_size = game->get_window().getSize();
     std::uniform_real_distribution<float> enemy_size(max_size / 2, max_size);
@@ -32,10 +32,10 @@ Enemy::Enemy(Game* game, ObjectType type, float max_size, float max_speed) : Obj
     make_skeleton(0.6);
 }
 
-Enemy::Enemy(ObjectType type, float max_size, float max_speed) : Object{ type, size, speed }
-{
-
-}
+//Enemy::Enemy(EntityType type, float max_size, float max_speed) : Entity{ type, size, speed }
+//{
+//
+//}
 
 Enemy::~Enemy() {}
 
@@ -62,7 +62,9 @@ sf::Vector2f Enemy::gen_random_position(float min_x, float max_x, float min_y, f
 sf::Vector2f Enemy::get_spawn_position()
 {
     sf::Vector2u window_size = game->get_window().getSize();
-    sf::Vector2f player_position = game->get_player_ptr()->get_position();
+    //sf::Vector2f player_position = game->get_player()->get_position();
+
+    sf::Vector2f player_position = game->get_entitymanager()->get_player()->get_position();
 
     if (player_position.x <= (float)window_size.x/2 && player_position.y <= (float)window_size.y / 2) // 1사분면
     {
@@ -94,7 +96,9 @@ sf::Vector2f Enemy::get_spawn_position()
 void Enemy::coordinate_direction()
 {
     //vector = destination - start
-    sf::Vector2f player_position = game->get_player_ptr()->get_position();
+    sf::Vector2f player_position = game->get_entitymanager()->get_player()->get_position();
+    //sf::Vector2f player_position = game->get_player()->get_position();
+
     sf::Vector2f enemy_to_player = player_position - shape->getPosition();
     distance_from_player = sqrt(enemy_to_player.x * enemy_to_player.x + enemy_to_player.y * enemy_to_player.y);
     if (distance_from_player < game->EPSILON) { distance_from_player = game->EPSILON; }

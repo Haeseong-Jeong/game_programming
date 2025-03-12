@@ -1,33 +1,33 @@
 #include "Game/Game.h"
-#include "Game/ObjectManager.h"
-#include "Object/Object.h"
+#include "Game/GameEntityManager.h"
+#include "Entity/Entity.h"
 
-Object::Object(Game* game, ObjectType type, float size, float speed)
+Entity::Entity(Game* game, EntityType type, float size, float speed)
     : game{ game }, size{ size }, speed{ speed }, type{ type }, activate{ true }
 {       
 }
 
-Object::Object(ObjectType type, float size, float speed)
+Entity::Entity(EntityType type, float size, float speed)
     : size{ size }, speed{ speed }, type{ type }, activate{ true }
 {
 }
 
-Object::~Object() { delete shape; }
+Entity::~Entity() { delete shape; }
 
-sf::Vector2f Object::get_position() { return shape->getPosition(); }
-sf::Sprite* Object::get_shape() { return shape; }
-ObjectType Object::get_type() { return type; }
+sf::Vector2f Entity::get_position() { return shape->getPosition(); }
+sf::Sprite* Entity::get_shape() { return shape; }
+EntityType Entity::get_type() { return type; }
 
-bool Object::is_activate() { return activate; }
-void Object::deactivate() { activate = false; }
+bool Entity::is_activate() { return activate; }
+void Entity::deactivate() { activate = false; }
 
-void Object::draw(sf::RenderWindow& window) { 
+void Entity::draw(sf::RenderWindow& window) { 
     window.draw(*shape);
     //window.draw(bounding_box);
     //window.draw(skeleton);
 }
 
-void Object::make_bounding_box()
+void Entity::make_bounding_box()
 {
     sf::FloatRect bounds = shape->getGlobalBounds();
     bounding_box = sf::RectangleShape(sf::Vector2f(bounds.size.x, bounds.size.y));
@@ -37,7 +37,7 @@ void Object::make_bounding_box()
     bounding_box.setOutlineThickness(0.7f);
 }
 
-void Object::make_skeleton(float scale)
+void Entity::make_skeleton(float scale)
 {
     sf::FloatRect bounds = shape->getGlobalBounds();
     float sk_width = bounds.size.x * scale;

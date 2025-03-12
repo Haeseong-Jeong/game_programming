@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Object/Object.h"
-#include "Object/Player.h"
-#include "Object/Enemy.h"
-#include "Object/Bullet.h"
+//#include "Entity/Entity.h"
+//#include "Entity/Player.h"
+//#include "Entity/Enemy.h"
+//#include "Entity/Bullet.h"
 
-#include "Game/ObjectManager.h"
 
 #include <SFML/Graphics.hpp>
 
 class Player;
 class Enemy;
 class Bullet;
+class GameEntityManager;
 
 class Game
 {
@@ -20,25 +20,28 @@ public:
 
 public:
 	Game(int window_w, int window_h);
-	//~Ctrl();
+	//~Game();
 
 	sf::Window& get_window();
 	sf::Texture& get_ship_texture();
 	sf::Texture& get_projectile_texture();
 
-	void set_player(Player* player);
-	Player* get_player(); // 플레이어 주소 반환
-	std::vector<Object*> get_objects(); // 객체들 배열 반환
+
+	GameEntityManager* get_entitymanager(); // 플레이어 주소 반환
+
+	//void set_player(Player* player);
+	//Player* get_player(); // 플레이어 주소 반환
+	//std::vector<Entity*> get_entities(); // 객체들 배열 반환
 	
-	bool check_collision(Object* a, Object* b); // 객체의 뼈대가 충돌했는지 판별 
+	bool check_collision(Entity* a, Entity* b); // 객체의 뼈대가 충돌했는지 판별 
 	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
 	void is_out_boundary(); // 객체가 화면 밖으로 나갔는지 판별
 
 	//void spwan_enemy(); // 일정 시간 마다 적 랜덤 생성
 	//void spwan_bullet(); // 일정 시간 마다 총알 랜덤 생성
 
-	bool initialize_game(); // texture 불러오기, initialize_objects() 함수 사용
-	void initialize_objects(); // create player, enemy, bullet
+	bool initialize_game(); // texture 불러오기, initialize_Entitys() 함수 사용
+	//void initialize_entitys(); // create player, enemy, bullet
 
 	void running_game();
 	void process_events(); // close event
@@ -55,18 +58,21 @@ private:
 	sf::Texture ship_texture;
 	sf::Texture projectile_texture;
 
-	ObjectManager obm;
-
-	int enemy_gen_num;
-	Player* player;
-	std::vector<Object*> objects;
+	GameEntityManager entitymanager;
 
 	sf::Clock clock;
-	sf::Clock enemy_clock;
-	sf::Clock bullet_clock;
-
 	float deltatime;
-	float enemy_period = 5.0f;
-	float shoot_period = 1.0f;
+
+	//int enemy_gen_num;
+	//Player* player;
+	//std::vector<Entity*> entities;
+
+
+	//sf::Clock enemy_clock;
+	//sf::Clock bullet_clock;
+
+
+	//float enemy_period = 5.0f;
+	//float shoot_period = 1.0f;
 };
 

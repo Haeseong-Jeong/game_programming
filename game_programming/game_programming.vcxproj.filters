@@ -15,45 +15,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Object\Bullet.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Object\Enemy.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Object\Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Object\Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Game\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Game\ObjectManager.h">
+    <ClInclude Include="..\include\Game\GameEntityManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Entity\Bullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Entity\Enemy.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Entity\Player.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Entity\Entity.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Object\Bullet.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Object\Enemy.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Object\Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Object\Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Game\Game.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Game\ObjectManager.cpp">
+    <ClCompile Include="..\src\Game\GameEntityManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Entity\Bullet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Entity\Enemy.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Entity\Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Entity\Entity.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

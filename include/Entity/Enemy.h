@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Object/Object.h"
+#include "Entity/Entity.h"
 #include <SFML/Graphics.hpp>
 
 class Game;
 
-class Enemy : public Object {
+class Enemy : public Entity {
 public:
-    Enemy(Game* game, ObjectType type, float max_size, float max_speed);
-    //Enemy(ObjectType type, float max_size, float max_speed);
+    Enemy(Game* game, EntityType type, float max_size, float max_speed);
+    //Enemy(EntityType type, float max_size, float max_speed);
 
     virtual ~Enemy();
 

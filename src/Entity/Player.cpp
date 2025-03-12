@@ -1,9 +1,9 @@
 #include "Game/Game.h"
-#include "Object/Player.h"
+#include "Entity/Player.h"
 
 #include <SFML/Graphics.hpp>
 
-Player::Player(Game* game, ObjectType type, float size, float speed) : Object{ game, type, size, speed }
+Player::Player(Game* game, EntityType type, float size, float speed) : Entity{ game, type, size, speed }
 {
     shape = new sf::Sprite(game->get_ship_texture());
     shape->setTextureRect(sf::IntRect({8,0}, {8,8}));
@@ -15,7 +15,7 @@ Player::Player(Game* game, ObjectType type, float size, float speed) : Object{ g
     make_skeleton(0.6);
 }
 
-Player::Player(sf::Texture& texture, ObjectType type, float size, float speed) : Object{ type, size, speed }
+Player::Player(sf::Texture& texture, EntityType type, float size, float speed) : Entity{ type, size, speed }
 {
     shape = new sf::Sprite(texture);
     shape->setTextureRect(sf::IntRect({ 8,0 }, { 8,8 }));
