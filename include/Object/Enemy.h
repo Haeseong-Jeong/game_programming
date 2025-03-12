@@ -8,7 +8,7 @@ class Game;
 class Enemy : public Object {
 public:
     Enemy(Game* game, ObjectType type, float max_size, float max_speed);
-    Enemy(ObjectType type, float max_size, float max_speed);
+    //Enemy(ObjectType type, float max_size, float max_speed);
 
     virtual ~Enemy();
 

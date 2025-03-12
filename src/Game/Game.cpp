@@ -2,12 +2,11 @@
 
 #include <iostream>
 
-Game::Game(int window_w,int window_h) 
-    : window_w{ window_w }, window_h{ window_h }, window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "Game play"), player{ nullptr }
+Game::Game(int window_w, int window_h) 
+    : window_w{ window_w }, window_h{ window_h }, window(sf::VideoMode({ sf::Vector2u(window_w, window_h) }), "Game play"), player{ nullptr }, obm{ this }
 {
-    obm = new ObjectManager();
-
-    //objects.clear();
+    //obm = ObjectManager(this);
+    objects.clear();
     enemy_gen_num = 5;
 }
 
@@ -15,7 +14,8 @@ sf::Window& Game::get_window() { return window; }
 sf::Texture& Game::get_ship_texture() { return ship_texture; }
 sf::Texture& Game::get_projectile_texture() { return projectile_texture; }
 
-Player* Game::get_player_ptr() { return player; }
+void Game::set_player(Player* player) { this->player = player; }
+Player* Game::get_player() { return player; }
 std::vector<Object*> Game::get_objects() { return objects; }
 
 
@@ -56,54 +56,59 @@ void Game::is_out_boundary()
     }
 }
 
-void Game::spwan_enemy()
-{
-    static bool first_spwan = true;
-    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
-    {
-        for (int i = 0; i < enemy_gen_num; i++)
-        {
-            Enemy* enemy = new Enemy(this, ObjectType::ENEMY, 3.0f, 350.0f);
-            objects.push_back(enemy);
-        }
-        first_spwan = false;
-        enemy_clock.restart();
-    }
-}
-
-
-void Game::spwan_bullet()
-{
-    static bool first_spwan = true;
-    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
-    {
-        Bullet* bullet = new Bullet(this, ObjectType::BULLET, 5.f, 550.f);
-        objects.push_back(bullet);
-        first_spwan = false;
-        bullet_clock.restart();
-    }
-}
+//void Game::spwan_enemy()
+//{
+//    static bool first_spwan = true;
+//    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
+//    {
+//        for (int i = 0; i < enemy_gen_num; i++)
+//        {
+//            Enemy* enemy = new Enemy(this, ObjectType::ENEMY, 3.0f, 350.0f);
+//            objects.push_back(enemy);
+//        }
+//        first_spwan = false;
+//        enemy_clock.restart();
+//    }
+//}
+//
+//
+//void Game::spwan_bullet()
+//{
+//    static bool first_spwan = true;
+//    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
+//    {
+//        Bullet* bullet = new Bullet(this, ObjectType::BULLET, 5.f, 550.f);
+//        objects.push_back(bullet);
+//        first_spwan = false;
+//        bullet_clock.restart();
+//    }
+//}
 
 
 bool Game::initialize_game() 
 {
     if (!ship_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png")) { return false; }
     if (!projectile_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png")) { return false; }
-    initialize_objects();
+
+    //initialize_objects();
+    obm.spwan_player();
+    obm.spwan_enemy();
+    obm.spwan_bullet();
     return true;
 }
 
 
-void Game::initialize_objects()
-{
-    Player* player = new Player(this, ObjectType::PLAYER, 3.0f, 550.f);
-    objects.push_back(player);
-    //obm->get_objects().push_back();
-    this->player = player;
-
-    //spwan_enemy();
-    //spwan_bullet();
-}
+//void Game::initialize_objects()
+//{
+//    //Player* player = new Player(this, ObjectType::PLAYER, 3.0f, 550.f);
+//    //objects.push_back(player);
+//    //this->player = player;
+//    //spwan_enemy();
+//    //spwan_bullet();
+//    obm.spwan_player();
+//    obm.spwan_enemy();
+//    obm.spwan_bullet();
+//}
 
 void Game::running_game()
 {
@@ -131,10 +136,8 @@ void Game::set_game()
     deltatime = clock.restart().asSeconds();
     player->move_by_mouse(window);
 
-    spwan_enemy();
-    spwan_bullet();
-    //obm->spwan_enemy();
-    //obm->spwan_bullet();
+    obm.spwan_enemy();
+    obm.spwan_bullet();
 }
 
 void Game::update_game()

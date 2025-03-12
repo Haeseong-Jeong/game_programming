@@ -26,15 +26,16 @@ public:
 	sf::Texture& get_ship_texture();
 	sf::Texture& get_projectile_texture();
 
-	Player* get_player_ptr(); // 플레이어 주소 반환
+	void set_player(Player* player);
+	Player* get_player(); // 플레이어 주소 반환
 	std::vector<Object*> get_objects(); // 객체들 배열 반환
 	
 	bool check_collision(Object* a, Object* b); // 객체의 뼈대가 충돌했는지 판별 
 	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
 	void is_out_boundary(); // 객체가 화면 밖으로 나갔는지 판별
 
-	void spwan_enemy(); // 일정 시간 마다 적 랜덤 생성
-	void spwan_bullet(); // 일정 시간 마다 총알 랜덤 생성
+	//void spwan_enemy(); // 일정 시간 마다 적 랜덤 생성
+	//void spwan_bullet(); // 일정 시간 마다 총알 랜덤 생성
 
 	bool initialize_game(); // texture 불러오기, initialize_objects() 함수 사용
 	void initialize_objects(); // create player, enemy, bullet
@@ -54,7 +55,7 @@ private:
 	sf::Texture ship_texture;
 	sf::Texture projectile_texture;
 
-	ObjectManager* obm;
+	ObjectManager obm;
 
 	int enemy_gen_num;
 	Player* player;
