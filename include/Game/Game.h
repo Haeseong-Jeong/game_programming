@@ -19,10 +19,12 @@ public:
 	sf::Texture& get_projectile_texture();
 	//sf::Texture& get_background_texture();
 
+	void set_background();
 	Player* get_player(); // 플레이어 주소 반환
 	std::vector<Entity*> get_entities(); // 객체들 배열 반환
 	
-	bool check_collision(Entity* a, Entity* b); // 객체의 뼈대가 충돌했는지 판별 
+	bool check_collision(Entity* a, Entity* b); // 객체의 뼈대가 충돌했는지 판별
+	void is_dead(); // 플레이어와 적이 맞았는지 판별, check_collision() 활용
 	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
 	void is_out_boundary(); // 객체가 화면 밖으로 나갔는지 판별
 	void erase_entities();
@@ -41,9 +43,12 @@ public:
 	void terminate_game(); // heap memory clear
 	
 private:
-	int window_w;
-	int window_h;
+	int score;
+	bool end_game;
+
+	sf::Vector2u window_size;
 	sf::RenderWindow window;
+	sf::Sprite* background;
 
 	sf::Texture ship_texture;
 	sf::Texture projectile_texture;
