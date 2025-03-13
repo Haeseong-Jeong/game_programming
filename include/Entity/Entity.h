@@ -5,7 +5,6 @@
 enum EntityType { PLAYER, ENEMY, BULLET };
 
 class Game;
-class EntityManager;
 
 class Entity
 {
@@ -15,8 +14,6 @@ public:
 
 public:
 	Entity(Game* game, EntityType type, float size, float speed);
-	Entity(EntityType type, float size, float speed);
-
 	virtual ~Entity();
 
 	sf::Vector2f get_position();

@@ -14,19 +14,6 @@ Player::Player(Game* game, EntityType type, float size, float speed) : Entity{ g
     make_bounding_box();
     make_skeleton(0.6);
 }
-
-Player::Player(sf::Texture& texture, EntityType type, float size, float speed) : Entity{ type, size, speed }
-{
-    shape = new sf::Sprite(texture);
-    shape->setTextureRect(sf::IntRect({ 8,0 }, { 8,8 }));
-    shape->setScale(sf::Vector2f(size, size));
-    //sf::Vector2u window_size = game->get_window().getSize();
-    //shape->setPosition({ sf::Vector2f(window_size.x / 2 + size, window_size.y / 2 + size) });
-
-    make_bounding_box();
-    make_skeleton(0.6);
-}
-
 Player::~Player() {}
 
 

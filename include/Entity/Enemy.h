@@ -8,9 +8,7 @@ class Game;
 class Enemy : public Entity {
 public:
     Enemy(Game* game, EntityType type, float max_size, float max_speed);
-    //Enemy(EntityType type, float max_size, float max_speed);
-
-    virtual ~Enemy();
+    ~Enemy();
 
     //Enemy(const Enemy& other);
     Enemy& operator=(const Enemy& other);

@@ -21,66 +21,56 @@ int main()
     // ****** Detected memory leaks! ******
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    //Game game;
-    Game game = Game(1200,800); //input window size
-    game.initialize_game();
-    game.running_game(); // set -> update(draw -> move)
-    game.terminate_game();
+    //Game game = Game(1200,800); //input window size
+    //game.initialize_game();
+    //game.running_game(); // set -> update(draw -> move)
+    //game.terminate_game();
 
-    //sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "Sprite Bounding Box");
+    sf::RenderWindow window(sf::VideoMode({ 1000, 500 }), "Sprite Bounding Box");
 
-    //// 텍스처 로드
-    //sf::Texture texture;
+    // 텍스처 로드
+    sf::Texture texture;
+    if (!texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_BackGrounds.png"))
     //if (!texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png"))
-    ////if (!texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png"))
-    //{
-    //    return -1;
-    //}
+    {
+        return -1;
+    }
 
-    //// 스프라이트 설정
-    //float size = 50.0f;
-    //sf::Sprite sprite(texture);
-    //sprite.setTextureRect(sf::IntRect({ 40,2 }, { 7,5 }));
-    //sprite.setScale(sf::Vector2f(size, size));
-    //sprite.setPosition({ 200.f, 150.f });  // 위치 설정
+    sf::Sprite sprite(texture);
 
-    //while (window.isOpen()) {
+    // 특정 영역만 잘라서 사용 (258,0)부터 (128x256) 크기
+    sf::IntRect cropRect({ 0, 0 }, { 128, 256 });
+    sprite.setTextureRect(cropRect);
 
-    //    while (const std::optional event = window.pollEvent())
-    //    {
-    //        // Close window: exit
-    //        if (event->is<sf::Event::Closed>())
-    //            window.close();
-    //    }
+    // 90도 회전
+    sprite.setRotation(sf::degrees(90.f));
 
-    //    window.clear();
+    // 원본 크기 (자른 부분의 크기)
+    sf::Vector2f croppedSize(cropRect.size.x, cropRect.size.y);
 
-    //    // 바운딩 박스 설정
-    //    sf::FloatRect bounds = sprite.getGlobalBounds();
-    //    sf::RectangleShape boundingBox(sf::Vector2f(bounds.size.x, bounds.size.y));
-    //    boundingBox.setPosition(sprite.getPosition());
-    //    boundingBox.setFillColor(sf::Color::Transparent);
-    //    boundingBox.setOutlineColor(sf::Color::Red);
-    //    boundingBox.setOutlineThickness(0.7f);
+    // 윈도우 크기에 맞게 스케일 적용 (회전 후, width <-> height 변경)
+    float scaleX = static_cast<float>(window.getSize().y) / croppedSize.x;
+    float scaleY = static_cast<float>(window.getSize().x) / croppedSize.y;
+    sprite.setScale(sf::Vector2f{ scaleX, scaleY });
 
-    //    float bb_width = bounds.size.x;
-    //    float bb_height = bounds.size.y;
-    //    float sk_width = bb_width * 0.7;
-    //    float sk_height = bb_height * 0.7;
+    // 회전 중심을 잘라낸 부분의 중심으로 설정
+    sprite.setOrigin(sf::Vector2f{ croppedSize.x / 2.f, croppedSize.y / 2.f });
 
-    //    sf::RectangleShape skeleton(sf::Vector2f(sk_width, sk_height));
-    //    skeleton.setPosition(bounds.getCenter() - sf::Vector2f(sk_width/2, sk_height/2));
-    //    skeleton.setFillColor(sf::Color::Transparent);
-    //    skeleton.setOutlineColor(sf::Color::Yellow);
-    //    skeleton.setOutlineThickness(0.7f);
+    // 회전 후, 화면 중앙에 배치
+    sprite.setPosition(sf::Vector2f{ window.getSize().x / 2.f, window.getSize().y / 2.f });
 
-    //    // 바운딩 박스 그리기
-    //    window.draw(sprite);
-    //    window.draw(boundingBox);
-    //    window.draw(skeleton);
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent())
+        {
+            // Close window: exit
+            if (event->is<sf::Event::Closed>())
+                window.close();
+        }
 
-    //    window.display();
-    //}
+        window.clear();
+        window.draw(sprite);
+        window.display();
+    }
 
     return 0;
 }

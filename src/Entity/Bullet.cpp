@@ -1,12 +1,11 @@
 #include "Game/Game.h"
 #include "Entity/Bullet.h"
+#include "Entity/Player.h"
 #include <iostream>
 
 Bullet::Bullet(Game* game, EntityType type, float size, float speed) : Entity{ game, type, size, speed }
 {
-    sf::Vector2f player_position = game->get_entitymanager()->get_player()->get_position();
-
-	//sf::Vector2f player_position = game->get_player()->get_position();
+	sf::Vector2f player_position = game->get_player()->get_position();
 	shape = new sf::Sprite(game->get_projectile_texture());
 	//shape->setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
     shape->setTextureRect(sf::IntRect({ 26,27 }, { 3,3 }));
@@ -27,11 +26,8 @@ sf::Vector2f Bullet::get_bullet_direction()
     sf::Vector2f min_dist_direction = sf::Vector2f(0, 0);
     float min_dist = 100000.0f;
 
-    Player* player = game->get_entitymanager()->get_player();
-    std::vector<Entity*> entities = game->get_entitymanager()->get_entities();
-
-    //Player* player = game->get_player();
-    //std::vector<Entity*> entities = game->get_entities();
+    Player* player = game->get_player();
+    std::vector<Entity*> entities = game->get_entities();
 
     for (int i = 1; i < entities.size(); i++)
     {

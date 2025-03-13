@@ -1,4 +1,5 @@
 #include "Entity/Enemy.h"
+#include "Entity/Player.h"
 #include "Game/Game.h"
 
 #include <cmath>
@@ -31,12 +32,6 @@ Enemy::Enemy(Game* game, EntityType type, float max_size, float max_speed) : Ent
     make_bounding_box();
     make_skeleton(0.6);
 }
-
-//Enemy::Enemy(EntityType type, float max_size, float max_speed) : Entity{ type, size, speed }
-//{
-//
-//}
-
 Enemy::~Enemy() {}
 
 Enemy& Enemy::operator=(const Enemy& other)
@@ -62,9 +57,7 @@ sf::Vector2f Enemy::gen_random_position(float min_x, float max_x, float min_y, f
 sf::Vector2f Enemy::get_spawn_position()
 {
     sf::Vector2u window_size = game->get_window().getSize();
-    //sf::Vector2f player_position = game->get_player()->get_position();
-
-    sf::Vector2f player_position = game->get_entitymanager()->get_player()->get_position();
+    sf::Vector2f player_position = game->get_player()->get_position();
 
     if (player_position.x <= (float)window_size.x/2 && player_position.y <= (float)window_size.y / 2) // 1»çºÐ¸é
     {
@@ -96,9 +89,7 @@ sf::Vector2f Enemy::get_spawn_position()
 void Enemy::coordinate_direction()
 {
     //vector = destination - start
-    sf::Vector2f player_position = game->get_entitymanager()->get_player()->get_position();
-    //sf::Vector2f player_position = game->get_player()->get_position();
-
+    sf::Vector2f player_position = game->get_player()->get_position();
     sf::Vector2f enemy_to_player = player_position - shape->getPosition();
     distance_from_player = sqrt(enemy_to_player.x * enemy_to_player.x + enemy_to_player.y * enemy_to_player.y);
     if (distance_from_player < game->EPSILON) { distance_from_player = game->EPSILON; }
@@ -110,6 +101,4 @@ void Enemy::move(float deltatime)
 {
     coordinate_direction();
     shape->move(direction * speed * deltatime); 
-
-    //bounding_box.move(direction * speed * deltatime);
 }
