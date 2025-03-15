@@ -1,8 +1,8 @@
-#include "Object/Entity/Enemy.h"
-#include "Object/Entity/Player.h"
 #include "Game/GameTextureManager.h"
 #include "Game/GameObjectManager.h"
 
+#include "Object/Entity/Enemy.h"
+#include "Object/Entity/Player.h"
 
 #include <cmath>
 #include <random>
@@ -27,6 +27,7 @@ Enemy::Enemy(GameObjectManager* objectmanager, EntityType type, float max_size, 
     shape->setTextureRect(sf::IntRect({ 40,2 }, { 7,5 }));
     shape->setScale(sf::Vector2f(size, size));
 
+    set_position();
     make_bounding_box();
     make_skeleton(0.6);
 }

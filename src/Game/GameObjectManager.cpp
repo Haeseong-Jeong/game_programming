@@ -23,25 +23,10 @@ GameObjectManager::~GameObjectManager()
     };
 }
 
-sf::Vector2u GameObjectManager::get_window_size()
-{
-    return window_size;
-}
-
-GameTextureManager* GameObjectManager::get_texturemanager()
-{
-    return texturemanager;
-}
-
-Player* GameObjectManager::get_player()
-{
-    return player;
-}
-
-std::vector<Entity*>& GameObjectManager::get_entities()
-{
-    return entities;
-}
+sf::Vector2u GameObjectManager::get_window_size() { return window_size; }
+GameTextureManager* GameObjectManager::get_texturemanager() { return texturemanager; }
+Player* GameObjectManager::get_player() { return player; }
+std::vector<Entity*>& GameObjectManager::get_entities() { return entities; }
 
 
 void GameObjectManager::spwan_player()
@@ -81,7 +66,6 @@ void GameObjectManager::spwan_bullet()
     {
         Bullet* bullet = new Bullet(this, EntityType::BULLET, 5.f, 550.f);
         entities.push_back(bullet);
-        //game->get_entities().push_back(bullet);
         first_spwan = false;
         bullet_clock.restart();
     }

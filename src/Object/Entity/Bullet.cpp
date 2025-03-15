@@ -3,6 +3,7 @@
 
 #include "Object/Entity/Bullet.h"
 #include "Object/Entity/Player.h"
+
 #include <iostream>
 
 
@@ -15,6 +16,7 @@ Bullet::Bullet(GameObjectManager* objectmanager, EntityType type, float size, fl
     shape->setTextureRect(sf::IntRect({ 26,27 }, { 3,3 }));
     shape->setScale(sf::Vector2f(size, size));
 
+    set_position();
     make_bounding_box();
     make_skeleton(0.6);
 }

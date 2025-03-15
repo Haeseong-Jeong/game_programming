@@ -2,11 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-class Object;
-class Entity;
 class Player;
-class Enemy;
-class Bullet;
+class Entity;
 class GameTextureManager;
 
 class GameObjectManager
@@ -25,8 +22,8 @@ public:
 	sf::Vector2u get_window_size();
 	GameTextureManager* get_texturemanager();
 
-	Player* get_player(); // 플레이어 주소 반환
-	std::vector<Entity*>& get_entities(); // 객체들 배열 반환
+	Player* get_player();
+	std::vector<Entity*>& get_entities();
 
 	void spwan_player();
 	void spwan_enemy();
@@ -35,10 +32,9 @@ public:
 
 private:
 	sf::Vector2u window_size;
-
 	GameTextureManager* texturemanager;
+
 	Player* player;
 	std::vector<Entity*> entities;
-
 };
 

@@ -4,7 +4,6 @@
 
 class GameObjectManager;
 
-
 class Object
 {
 public:
@@ -26,7 +25,6 @@ public:
 
 	//void make_bounding_box();
 	//void make_skeleton(float scale);
-
 
 protected:
 	GameObjectManager* objectmanager;

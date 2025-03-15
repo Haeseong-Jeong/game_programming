@@ -3,7 +3,6 @@
 #include "Object/Entity/Entity.h"
 #include <SFML/Graphics.hpp>
 
-//class Game;
 class GameObjectManager;
 
 class Player : public Entity {

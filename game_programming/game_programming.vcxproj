@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Game\Game_backup.h" />
+    <ClInclude Include="..\include\Game\Game_backup.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\include\Object\Entity\Bullet.h" />
     <ClInclude Include="..\include\Object\Entity\Enemy.h" />
     <ClInclude Include="..\include\Object\Entity\Entity.h" />
@@ -31,7 +33,9 @@
     <ClInclude Include="..\include\Object\Object.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Game\Game_backup.cpp" />
+    <ClCompile Include="..\src\Game\Game_backup.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\src\Object\Entity\Bullet.cpp" />
     <ClCompile Include="..\src\Object\Entity\Enemy.cpp" />
     <ClCompile Include="..\src\Object\Entity\Entity.cpp" />

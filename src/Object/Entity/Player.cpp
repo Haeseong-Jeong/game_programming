@@ -11,6 +11,7 @@ Player::Player(GameObjectManager* objectmanager, EntityType type, float size, fl
     shape->setTextureRect(sf::IntRect({8,0}, {8,8}));
     shape->setScale(sf::Vector2f(size, size));
 
+    set_position();
     make_bounding_box();
     make_skeleton(0.6);
 }

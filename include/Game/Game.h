@@ -2,14 +2,18 @@
 
 #include <SFML/Graphics.hpp>
 
+class Entity;
+
 class GameTextureManager;
 class GameObjectManager;
+class GameLogic;
 
 class Game
 {
 public:
 	GameObjectManager* objectmanager;
 	GameTextureManager* texturemanager;
+	GameLogic* gamelogic;
 
 public:
 	Game(int window_w, int window_h);
@@ -19,14 +23,10 @@ public:
 
 	void set_background();
 	
-	bool check_collision(Entity* a, Entity* b); // 객체의 뼈대가 충돌했는지 판별
-	void is_dead(); // 플레이어와 적이 맞았는지 판별, check_collision() 활용
-	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
-	void is_out_boundary(); // 객체가 화면 밖으로 나갔는지 판별
-	void erase_entities();
-
-	void spwan_enemy(); // 일정 시간 마다 적 랜덤 생성
-	void spwan_bullet(); // 일정 시간 마다 총알 랜덤 생성
+	//bool check_collision(Entity* a, Entity* b); // 객체의 뼈대가 충돌했는지 판별
+	//void is_dead(); // 플레이어와 적이 맞았는지 판별, check_collision() 활용
+	//void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
+	//void is_out_boundary(); // 객체가 화면 밖으로 나갔는지 판별
 
 	bool initialize_game(); // texture 불러오기, initialize_Entitys() 함수 사용
 	void initialize_entities(); // create player, enemy, bullet
@@ -48,6 +48,5 @@ private:
 
 	sf::Clock clock;
 	float deltatime;
-
 };
 

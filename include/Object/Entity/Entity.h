@@ -5,7 +5,6 @@
 
 enum EntityType { PLAYER, ENEMY, BULLET };
 
-//class Game;
 class GameTextureManager;
 class GameObjectManager;
 
@@ -28,7 +27,7 @@ public:
 
 	EntityType get_type();
 
-	virtual void set_position();
+	virtual void set_position() = 0;
 	virtual void move(float deltatime) = 0; //순수 가상함수, cpp파일에 정의 없어도 된다. 대신, 상속 클래스에서 꼭 정의가 되어야 함.
 	void make_bounding_box();
 	void make_skeleton(float scale);
@@ -36,6 +35,5 @@ public:
 
 protected:
 	EntityType type;
-
 };
 

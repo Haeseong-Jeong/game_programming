@@ -5,18 +5,8 @@ Entity::Entity(GameObjectManager* objectmanager, EntityType type, float size, fl
     : Object{ objectmanager, size, speed }, type{ type }
 {       
 }
-
 Entity::~Entity() {}
 
-//sf::Vector2f Entity::get_position() { return shape->getPosition(); }
-//sf::Sprite* Entity::get_shape() { return shape; }
-//bool Entity::is_activate() { return activate; }
-//void Entity::deactivate() { activate = false; }
-//void Entity::draw(sf::RenderWindow& window) {
-//    window.draw(*shape);
-//    //window.draw(bounding_box);
-//    //window.draw(skeleton);
-//}
 
 EntityType Entity::get_type() { return type; }
 

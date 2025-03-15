@@ -1,76 +1,91 @@
-//#include "Game/GameObjectManager.h"
-//#include "Object/Entity/Entity.h"
-////#include "Game/Game.h"
-//#include <iostream>>
-//
-//GameEntityManager::GameEntityManager(Game* game) : game{ game }
-//{
-//}
-//
-//GameEntityManager::~GameEntityManager()
-//{
-//    ////delete player;
-//    //for (int i = 0; i < entities.size(); i++)
-//    //{
-//    //    delete entities[i];
-//    //};
-//}
-//
-//Player* GameEntityManager::get_player()
-//{
-//    return player;
-//}
-//
-//std::vector<Entity*>& GameEntityManager::get_entities()
-//{
-//    return entities;
-//}
-//
-//
-//void GameEntityManager::spwan_player()
-//{
-//    float size = 3.0f;
-//    float speed = 550.f;
-//    sf::Vector2u window_size = game->get_window().getSize();
-//    Player* player = new Player(game, EntityType::PLAYER, size, speed);
-//    player->get_shape()->setPosition({ sf::Vector2f(window_size.x / 2 - size, window_size.y / 2 - size)});
-//    entities.push_back(player);
-//    this->player = player;
-//    
-//    //game->get_entities().push_back(player);
-//    //game->set_player(player);
-//}
-//
-//
-//void GameEntityManager::spwan_enemy()
-//{
-//    float max_size = 3.0f;
-//    float max_speed = 350.f;
-//    static bool first_spwan = true;
-//    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
-//    {
-//        for (int i = 0; i < enemy_gen_num; i++)
-//        {
-//            Enemy* enemy = new Enemy(game, EntityType::ENEMY, max_size, max_speed);
-//            entities.push_back(enemy);
-//            //game->get_entities().push_back(enemy);
-//        }
-//        first_spwan = false;
-//        enemy_clock.restart();
-//    }
-//}
-//
-//void GameEntityManager::spwan_bullet()
-//{
-//    float size = 5.0f;
-//    float speed = 550.f;
-//    static bool first_spwan = true;
-//    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
-//    {
-//        Bullet* bullet = new Bullet(game, EntityType::BULLET, 5.f, 550.f);
-//        entities.push_back(bullet);
-//        //game->get_entities().push_back(bullet);
-//        first_spwan = false;
-//        bullet_clock.restart();
-//    }
-//}
+#include "Game/GameLogic.h"
+#include "Game/GameObjectManager.h"
+
+#include "Object/Entity/Entity.h"
+
+#include <iostream>>
+
+GameLogic::GameLogic(GameObjectManager* objectmanager) : objectmanager{ objectmanager }
+{
+}
+
+GameLogic::~GameLogic()
+{
+}
+
+bool GameLogic::check_collision(Entity* e, Entity* b)
+{
+	std::optional<sf::Rect<float>> is_intersection = e->skeleton.getGlobalBounds().findIntersection(b->skeleton.getGlobalBounds());
+	return is_intersection.has_value();
+}
+
+void GameLogic::is_hit()
+{
+    std::vector<Entity*>& entities = objectmanager->get_entities();
+
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (entities[i]->get_type() == EntityType::BULLET)
+        {
+            for (int j = 0; j < entities.size(); j++)
+            {
+                if (entities[j]->get_type() != EntityType::ENEMY) { continue; }
+                if (check_collision(entities[i], entities[j]))
+                {
+                    entities[i]->deactivate();
+                    entities[j]->deactivate();
+                    //score += 1;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+bool GameLogic::is_dead()
+{
+    std::vector<Entity*>& entities = objectmanager->get_entities();
+
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (entities[i]->get_type() == EntityType::PLAYER)
+        {
+            for (int j = 0; j < entities.size(); j++)
+            {
+                if (entities[j]->get_type() != EntityType::ENEMY) { continue; }
+                if (check_collision(entities[i], entities[j]))
+                {
+                    //end_game = true;
+                    //break;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+
+bool GameLogic::is_out_boundary(sf::Vector2u window_size)
+{
+    std::vector<Entity*>& entities = objectmanager->get_entities();
+
+    for (int i = 0; i < entities.size(); i++)
+    {
+        if (entities[i]->get_type() == EntityType::ENEMY) { continue; }
+        sf::Vector2f pos = entities[i]->get_position();
+        if (pos.x < 0 || pos.x > window_size.x || pos.y < 0 || pos.y > window_size.y)
+        {
+            if (entities[i]->get_type() == EntityType::PLAYER)
+            {
+                //end_game = true;
+                //return;
+                return true;
+            }
+            entities[i]->deactivate();
+        }
+    }
+    return false;
+}
