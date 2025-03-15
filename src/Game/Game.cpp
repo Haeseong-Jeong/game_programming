@@ -38,78 +38,6 @@ void Game::set_background()
     background->setColor(sf::Color(255, 255, 255, 50));  // 4번째 인자가 투명도, 0 ~ 256 투명도 (0이 완전 투명)
 }
 
-
-//bool Game::check_collision(Entity* e, Entity* b) 
-//{   
-//    std::optional<sf::Rect<float>> is_intersection = e->skeleton.getGlobalBounds().findIntersection(b->skeleton.getGlobalBounds());
-//    return is_intersection.has_value();
-//}
-//void Game::is_hit()
-//{
-//    std::vector<Entity*>& entities = objectmanager->get_entities();
-//
-//    for (int i = 0; i < entities.size(); i++)
-//    {
-//        if (entities[i]->get_type() == EntityType::BULLET)
-//        {
-//            for (int j = 0; j < entities.size(); j++)
-//            {
-//                if (entities[j]->get_type() != EntityType::ENEMY) { continue; }
-//                if (check_collision(entities[i], entities[j]))
-//                {
-//                    entities[i]->deactivate();
-//                    entities[j]->deactivate();
-//                    score += 1;
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//void Game::is_dead()
-//{
-//    std::vector<Entity*>& entities = objectmanager->get_entities();
-//
-//    for (int i = 0; i < entities.size(); i++)
-//    {
-//        if (entities[i]->get_type() == EntityType::PLAYER)
-//        {
-//            for (int j = 0; j < entities.size(); j++)
-//            {
-//                if (entities[j]->get_type() != EntityType::ENEMY) { continue; }
-//                if (check_collision(entities[i], entities[j]))
-//                {
-//                    end_game = true;
-//                    break;
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//
-//void Game::is_out_boundary()
-//{
-//    std::vector<Entity*>& entities = objectmanager->get_entities();
-//
-//    for (int i = 0; i < entities.size(); i++)
-//    {
-//        if (entities[i]->get_type() == EntityType::ENEMY) { continue; }
-//        sf::Vector2f pos = entities[i]->get_position();
-//        if (pos.x < 0 || pos.x > window_size.x || pos.y < 0 || pos.y > window_size.y)
-//        { 
-//            if (entities[i]->get_type() == EntityType::PLAYER)
-//            {
-//                end_game = true;
-//                return;
-//            }
-//            entities[i]->deactivate(); 
-//        }
-//    }
-//}
-
-
 bool Game::initialize_game() 
 {
     set_background();
@@ -167,12 +95,13 @@ void Game::update_game()
     // 2. Draw and Move Entity
     std::vector<Entity*>& entities = objectmanager->get_entities();
 
-    if (end_game)
+    if (gamelogic->is_dead() || gamelogic->is_out_boundary(window_size))
     {
         for (int i = 0; i < entities.size(); i++)
         {
             entities[i]->draw(window);
         }
+        end_game = true;
         window.display();
         return;
     }
@@ -186,10 +115,9 @@ void Game::update_game()
     }
 
     //std::cout << "객체 개수 :" << entities.size() << std::endl;
-
     gamelogic->is_hit();// 피격 판정
-    end_game = gamelogic->is_dead();
-    end_game = gamelogic->is_out_boundary(window_size); // 화면 나감 판정
+    //end_game = gamelogic->is_dead();
+    //end_game = gamelogic->is_out_boundary(window_size); // 화면 나감 판정
 
     objectmanager->erase_entities();
 
