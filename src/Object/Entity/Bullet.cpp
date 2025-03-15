@@ -1,6 +1,6 @@
 #include "Game/Game.h"
-#include "Entity/Bullet.h"
-#include "Entity/Player.h"
+#include "Object/Entity/Bullet.h"
+#include "Object/Entity/Player.h"
 #include <iostream>
 
 Bullet::Bullet(Game* game, EntityType type, float size, float speed) : Entity{ game, type, size, speed }

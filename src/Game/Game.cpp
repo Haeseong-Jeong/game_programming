@@ -1,8 +1,8 @@
 #include "Game/Game.h"
-#include "Entity/Entity.h"
-#include "Entity/Enemy.h"
-#include "Entity/Bullet.h"
-#include "Entity/Player.h"
+#include "Object/Entity/Entity.h"
+#include "Object/Entity/Enemy.h"
+#include "Object/Entity/Bullet.h"
+#include "Object/Entity/Player.h"
 #include <iostream>
 
 Game::Game(int window_w, int window_h)

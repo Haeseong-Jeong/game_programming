@@ -18,19 +18,25 @@
     <ClInclude Include="..\include\Game\Game.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Game\GameEntityManager.h">
+    <ClInclude Include="..\include\Object\Entity\Bullet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Entity\Bullet.h">
+    <ClInclude Include="..\include\Object\Entity\Enemy.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Entity\Enemy.h">
+    <ClInclude Include="..\include\Object\Entity\Entity.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Entity\Player.h">
+    <ClInclude Include="..\include\Object\Entity\Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Entity\Entity.h">
+    <ClInclude Include="..\include\Game\GameLogic.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Game\GameObjectManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Game\GameTextureManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,22 +44,28 @@
     <ClCompile Include="..\src\Game\Game.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Game\GameEntityManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Entity\Bullet.cpp">
+    <ClCompile Include="..\src\Object\Entity\Bullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Entity\Enemy.cpp">
+    <ClCompile Include="..\src\Object\Entity\Enemy.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Entity\Player.cpp">
+    <ClCompile Include="..\src\Object\Entity\Entity.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Entity\Entity.cpp">
+    <ClCompile Include="..\src\Object\Entity\Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Game\GameLogic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Game\GameObjectManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Game\GameTextureManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

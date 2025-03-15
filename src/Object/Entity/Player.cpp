@@ -1,5 +1,5 @@
 #include "Game/Game.h"
-#include "Entity/Player.h"
+#include "Object/Entity/Player.h"
 
 #include <SFML/Graphics.hpp>
 

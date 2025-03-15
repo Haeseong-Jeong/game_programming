@@ -1,5 +1,5 @@
-#include "Entity/Enemy.h"
-#include "Entity/Player.h"
+#include "Object/Entity/Enemy.h"
+#include "Object/Entity/Player.h"
 #include "Game/Game.h"
 
 #include <cmath>

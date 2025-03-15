@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/Entity.h"
+#include "Object/Entity/Entity.h"
 #include <SFML/Graphics.hpp>
 
 class Game;

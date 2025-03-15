@@ -1,5 +1,5 @@
 #include "Game/Game.h"
-#include "Entity/Entity.h"
+#include "Object/Entity/Entity.h"
 
 Entity::Entity(Game* game, EntityType type, float size, float speed)
     : game{ game }, size{ size }, speed{ speed }, type{ type }, activate{ true }
