@@ -1,7 +1,4 @@
 #include "Game/Game.h"
-#include "Game/GameTextureManager.h"
-#include "Game/GameObjectManager.h"
-
 #include "Object/Entity/Entity.h"
 #include "Object/Entity/Enemy.h"
 #include "Object/Entity/Bullet.h"
@@ -9,14 +6,12 @@
 #include <iostream>
 
 Game::Game(int window_w, int window_h)
-    : background{ nullptr }, deltatime{ 0 }, score{ 0 }, end_game{ false }
+    : player{ nullptr }, background{ nullptr }, deltatime{ 0 }, score{ 0 }, end_game{ false }
 {
     window_size = sf::Vector2u(window_w, window_h);
-    window = sf::RenderWindow{ sf::VideoMode(window_size), "Game play" };
-
-    texturemanager = new GameTextureManager();
-    texturemanager->load_textures();
-    objectmanager = new GameObjectManager(texturemanager, window_size);
+    window = sf::RenderWindow{ sf::VideoMode(window_size), "Game play" },
+    entities.clear();
+    enemy_gen_num = 5;
 }
 
 Game::~Game()
@@ -24,11 +19,12 @@ Game::~Game()
 }
 
 sf::Window& Game::get_window() { return window; }
-
+sf::Texture& Game::get_ship_texture() { return ship_texture; }
+sf::Texture& Game::get_projectile_texture() { return projectile_texture; }
 
 void Game::set_background()
 {
-    background = new sf::Sprite(texturemanager->get_background_texture());
+    background = new sf::Sprite(background_texture);
     sf::Vector2f texture_size(256.f, 128.f);
     sf::IntRect crop_rect({ 257, 258 }, { 256, 128 });
     background->setTextureRect(crop_rect);
@@ -36,6 +32,9 @@ void Game::set_background()
     background->setScale(scaleFactor);
     background->setColor(sf::Color(255, 255, 255, 50));  // 4번째 인자가 투명도, 0 ~ 256 투명도 (0이 완전 투명)
 }
+
+Player* Game::get_player() { return player; }
+std::vector<Entity*> Game::get_entities() { return entities; }
 
 
 bool Game::check_collision(Entity* e, Entity* b) 
@@ -46,8 +45,6 @@ bool Game::check_collision(Entity* e, Entity* b)
 
 void Game::is_hit()
 {
-    std::vector<Entity*>& entities = objectmanager->get_entities();
-
     for (int i = 0; i < entities.size(); i++)
     {
         if (entities[i]->get_type() == EntityType::BULLET)
@@ -69,8 +66,6 @@ void Game::is_hit()
 
 void Game::is_dead()
 {
-    std::vector<Entity*>& entities = objectmanager->get_entities();
-
     for (int i = 0; i < entities.size(); i++)
     {
         if (entities[i]->get_type() == EntityType::PLAYER)
@@ -91,8 +86,6 @@ void Game::is_dead()
 
 void Game::is_out_boundary()
 {
-    std::vector<Entity*>& entities = objectmanager->get_entities();
-
     for (int i = 0; i < entities.size(); i++)
     {
         if (entities[i]->get_type() == EntityType::ENEMY) { continue; }
@@ -109,12 +102,55 @@ void Game::is_out_boundary()
     }
 }
 
+void Game::erase_entities()
+{
+    std::erase_if(entities, [&](Entity* entity)
+        {
+            if (!entity->is_activate())
+            {
+                delete entity; // 먼저 객체를 삭제
+                return true;   // 벡터에서 제거
+            }
+            return false;
+        }
+    );
+}
+
+void Game::spwan_enemy()
+{
+    static bool first_spwan = true;
+    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
+    {
+        for (int i = 0; i < enemy_gen_num; i++)
+        {
+            Enemy* enemy = new Enemy(this, EntityType::ENEMY, 3.0f, 350.0f);
+            entities.push_back(enemy);
+        }
+        first_spwan = false;
+        enemy_clock.restart();
+    }
+}
 
 
+void Game::spwan_bullet()
+{
+    static bool first_spwan = true;
+    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
+    {
+        Bullet* bullet = new Bullet(this, EntityType::BULLET, 5.f, 550.f);
+        entities.push_back(bullet);
+        first_spwan = false;
+        bullet_clock.restart();
+    }
+}
 
 
 bool Game::initialize_game() 
 {
+    if (!ship_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Ships.png")) { return false; }
+    if (!projectile_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_Projectiles.png")) { return false; }
+    if (!background_texture.loadFromFile("../resources/sprites/SpaceShooterAssetPack_BackGrounds.png")) { return false; }
+
     set_background();
     initialize_entities();
     return true;
@@ -123,9 +159,12 @@ bool Game::initialize_game()
 
 void Game::initialize_entities()
 {
-    objectmanager->spwan_player();
-    objectmanager->spwan_enemy();
-    objectmanager->spwan_bullet();
+    Player* player = new Player(this, EntityType::PLAYER, 3.0f, 550.f);
+    entities.push_back(player);
+    this->player = player;
+
+    spwan_enemy();
+    spwan_bullet();
 }
 
 void Game::running_game()
@@ -154,10 +193,10 @@ void Game::set_game()
     if (!end_game)
     {
         deltatime = clock.restart().asSeconds();
-        //player->move_by_mouse(window);
+        player->move_by_mouse(window);
 
-        objectmanager->spwan_enemy();
-        objectmanager->spwan_bullet();
+        spwan_enemy();
+        spwan_bullet();
     }
 }
 
@@ -168,8 +207,6 @@ void Game::update_game()
     window.draw(*background);
 
     // 2. Draw and Move Entity
-    std::vector<Entity*>& entities = objectmanager->get_entities();
-
     if (end_game)
     {
         for (int i = 0; i < entities.size(); i++)
@@ -202,8 +239,6 @@ void Game::update_game()
 
 void Game::terminate_game()
 {
-    std::vector<Entity*>& entities = objectmanager->get_entities();
-
     for (int i = 0; i < entities.size(); i++)
     {
         delete entities[i];

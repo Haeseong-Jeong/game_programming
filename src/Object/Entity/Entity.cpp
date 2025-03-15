@@ -1,25 +1,25 @@
-#include "Game/Game.h"
+#include "Game/GameTextureManager.h"
 #include "Object/Entity/Entity.h"
 
-Entity::Entity(Game* game, EntityType type, float size, float speed)
-    : game{ game }, size{ size }, speed{ speed }, type{ type }, activate{ true }
+Entity::Entity(GameObjectManager* objectmanager, EntityType type, float size, float speed)
+    : Object{ objectmanager, size, speed }, type{ type }
 {       
 }
 
-Entity::~Entity() { delete shape; }
+Entity::~Entity() {}
 
-sf::Vector2f Entity::get_position() { return shape->getPosition(); }
-sf::Sprite* Entity::get_shape() { return shape; }
+//sf::Vector2f Entity::get_position() { return shape->getPosition(); }
+//sf::Sprite* Entity::get_shape() { return shape; }
+//bool Entity::is_activate() { return activate; }
+//void Entity::deactivate() { activate = false; }
+//void Entity::draw(sf::RenderWindow& window) {
+//    window.draw(*shape);
+//    //window.draw(bounding_box);
+//    //window.draw(skeleton);
+//}
+
 EntityType Entity::get_type() { return type; }
 
-bool Entity::is_activate() { return activate; }
-void Entity::deactivate() { activate = false; }
-
-void Entity::draw(sf::RenderWindow& window) { 
-    window.draw(*shape);
-    //window.draw(bounding_box);
-    //window.draw(skeleton);
-}
 
 void Entity::make_bounding_box()
 {

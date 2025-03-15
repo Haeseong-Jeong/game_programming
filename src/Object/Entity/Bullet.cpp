@@ -1,19 +1,19 @@
-#include "Game/Game.h"
+#include "Game/GameTextureManager.h"
+#include "Game/GameObjectManager.h"
+
 #include "Object/Entity/Bullet.h"
 #include "Object/Entity/Player.h"
 #include <iostream>
 
-Bullet::Bullet(Game* game, EntityType type, float size, float speed) : Entity{ game, type, size, speed }
+
+Bullet::Bullet(GameObjectManager* objectmanager, EntityType type, float size, float speed) 
+    : Entity{ objectmanager, type, size, speed }
+
 {
-	sf::Vector2f player_position = game->get_player()->get_position();
-	shape = new sf::Sprite(game->get_projectile_texture());
+	shape = new sf::Sprite(objectmanager->get_texturemanager()->get_projectile_texture());
 	//shape->setTextureRect(sf::IntRect({ 24,24 }, { 8,8 }));
     shape->setTextureRect(sf::IntRect({ 26,27 }, { 3,3 }));
     shape->setScale(sf::Vector2f(size, size));
-
-	shape->setPosition(player_position);
-	direction = get_bullet_direction();
-    if (direction == sf::Vector2f(0,0)) { activate = false; }
 
     make_bounding_box();
     make_skeleton(0.6);
@@ -21,13 +21,22 @@ Bullet::Bullet(Game* game, EntityType type, float size, float speed) : Entity{ g
 Bullet::~Bullet() {}
 
 
+void Bullet::set_position()
+{
+    sf::Vector2f player_position = objectmanager->get_player()->get_position();
+    shape->setPosition(player_position);
+    direction = get_bullet_direction();
+    if (direction == sf::Vector2f(0, 0)) { activate = false; }
+
+}
+
 sf::Vector2f Bullet::get_bullet_direction()
 {
     sf::Vector2f min_dist_direction = sf::Vector2f(0, 0);
     float min_dist = 100000.0f;
 
-    Player* player = game->get_player();
-    std::vector<Entity*> entities = game->get_entities();
+    Player* player = objectmanager->get_player();
+    std::vector<Entity*> entities = objectmanager->get_entities();
 
     for (int i = 1; i < entities.size(); i++)
     {
@@ -40,7 +49,7 @@ sf::Vector2f Bullet::get_bullet_direction()
 
         if (dist < min_dist)
         {
-            if (dist < game->EPSILON) { dist = game->EPSILON; }
+            if (dist < EPSILON) { dist = EPSILON; }
             min_dist = dist;
             min_dist_direction = player_to_enemy / dist;
         }
