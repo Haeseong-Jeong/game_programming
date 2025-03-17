@@ -16,7 +16,6 @@ GameObjectManager::GameObjectManager(GameTextureManager* texturemanager, sf::Vec
 
 GameObjectManager::~GameObjectManager()
 {
-    //delete player;
     for (int i = 0; i < entities.size(); i++)
     {
         delete entities[i];
@@ -84,4 +83,12 @@ void GameObjectManager::erase_entities()
             return false;
         }
     );
+}
+
+void GameObjectManager::reset_entities()
+{
+    for (int i = 0; i < entities.size(); i++)
+    {
+        delete entities[i];
+    };
 }

@@ -5,7 +5,7 @@
 
 #include <iostream>>
 
-GameLogic::GameLogic(GameObjectManager* objectmanager) : objectmanager{ objectmanager }
+GameLogic::GameLogic(GameObjectManager* objectmanager) : objectmanager{ objectmanager }, score{ 0 }
 {
 }
 
@@ -13,11 +13,15 @@ GameLogic::~GameLogic()
 {
 }
 
+int GameLogic::get_score() { return score; }
+
 bool GameLogic::check_collision(Entity* e, Entity* b)
 {
 	std::optional<sf::Rect<float>> is_intersection = e->skeleton.getGlobalBounds().findIntersection(b->skeleton.getGlobalBounds());
 	return is_intersection.has_value();
 }
+
+
 
 void GameLogic::is_hit()
 {
@@ -34,6 +38,7 @@ void GameLogic::is_hit()
                 {
                     entities[i]->deactivate();
                     entities[j]->deactivate();
+                    score = score + 1;
                     //score += 1;
                     break;
                 }

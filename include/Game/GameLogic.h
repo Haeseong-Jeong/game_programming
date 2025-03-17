@@ -14,6 +14,7 @@ public:
 	GameLogic(GameObjectManager* objectmanager);
 	~GameLogic();
 
+	int get_score();
 	bool check_collision(Entity* e, Entity* b); // 객체의 뼈대가 충돌했는지 판별
 	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용
 	bool is_dead(); // 플레이어와 적이 맞았는지 판별, check_collision() 활용
@@ -21,5 +22,6 @@ public:
 
 private:
 	GameObjectManager* objectmanager;
+	int score;
 };
 

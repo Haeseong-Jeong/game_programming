@@ -29,6 +29,7 @@ public:
 	void spwan_enemy();
 	void spwan_bullet();
 	void erase_entities();
+	void reset_entities();
 
 private:
 	sf::Vector2u window_size;

@@ -4,27 +4,42 @@
 #include "Game/GameObjectManager.h"
 
 #include "Object/Entity/Entity.h"
-//#include "Object/Entity/Enemy.h"
-//#include "Object/Entity/Bullet.h"
 //#include "Object/Entity/Player.h"
 #include <iostream>
+#include <string>
 
 Game::Game(int window_w, int window_h)
-    : background{ nullptr }, deltatime{ 0 }, score{ 0 }, end_game{ false }
+    : text{ nullptr }, background { nullptr }, deltatime{ 0 }, end_game{ false }, score_text{ "" }
 {
     window_size = sf::Vector2u(window_w, window_h);
     window = sf::RenderWindow{ sf::VideoMode(window_size), "Game play" };
 
     texturemanager = new GameTextureManager();
-    texturemanager->load_textures();
     objectmanager = new GameObjectManager(texturemanager, window_size);
     gamelogic = new GameLogic(objectmanager);
 }
 
-Game::~Game()
-{}
+Game::~Game() {}
 
 sf::Window& Game::get_window() { return window; }
+
+
+void Game::set_text()
+{
+    text = new sf::Text(texturemanager->get_font());
+    score_text = "Score : ";
+    text->setString(score_text);
+    text->setCharacterSize(24); // in pixels, not points!
+    text->setFillColor(sf::Color::White);
+    text->setStyle(sf::Text::Bold);
+}
+
+void Game::update_score()
+{
+    score_text = "Score : ";
+    score_text.append(std::to_string(gamelogic->get_score()));
+    text->setString(score_text);
+}
 
 
 void Game::set_background()
@@ -40,7 +55,13 @@ void Game::set_background()
 
 bool Game::initialize_game() 
 {
+    if (!texturemanager->load_textures())
+    {
+        std::cout << "Texture load failed!!" << std::endl;
+        return false;
+    }
     set_background();
+    set_text();
     initialize_entities();
     return true;
 }
@@ -69,8 +90,19 @@ void Game::process_events()
     while (const std::optional event = window.pollEvent())
     {
         // Close window: exit
-        if (event->is<sf::Event::Closed>())
+        if (event->is<sf::Event::Closed>()) { window.close(); }
+           
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+        {
             window.close();
+        }
+
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+        {
+            reset_game();
+            //window.close();
+        }
+
     }
 }
 
@@ -79,7 +111,7 @@ void Game::set_game()
     if (!end_game)
     {
         deltatime = clock.restart().asSeconds();
-        //player->move_by_mouse(window);
+        //objectmanager->get_player()->move_by_mouse(window);
 
         objectmanager->spwan_enemy();
         objectmanager->spwan_bullet();
@@ -91,6 +123,7 @@ void Game::update_game()
     // 1. Clear screen
     window.clear();
     window.draw(*background);
+    window.draw(*text);
 
     // 2. Draw and Move Entity
     std::vector<Entity*>& entities = objectmanager->get_entities();
@@ -116,9 +149,7 @@ void Game::update_game()
 
     //std::cout << "객체 개수 :" << entities.size() << std::endl;
     gamelogic->is_hit();// 피격 판정
-    //end_game = gamelogic->is_dead();
-    //end_game = gamelogic->is_out_boundary(window_size); // 화면 나감 판정
-
+    update_score();
     objectmanager->erase_entities();
 
     // 3. Display the window
@@ -132,4 +163,11 @@ void Game::terminate_game()
     delete objectmanager;
     delete texturemanager;
     delete background;
+    delete text;
+}
+
+void Game::reset_game()
+{
+    objectmanager->reset_entities();
+    initialize_entities();
 }
