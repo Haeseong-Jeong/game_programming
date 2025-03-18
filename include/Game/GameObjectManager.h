@@ -26,8 +26,8 @@ public:
 	std::vector<Entity*>& get_entities();
 
 	void spwan_player();
-	void spwan_enemy();
-	void spwan_bullet();
+	void spwan_enemy(bool first_spawn = false);
+	void spwan_bullet(bool first_spawn = false);
 	void erase_entities();
 	void reset_entities();
 

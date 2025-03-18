@@ -70,8 +70,8 @@ bool Game::initialize_game()
 void Game::initialize_entities()
 {
     objectmanager->spwan_player();
-    objectmanager->spwan_enemy();
-    objectmanager->spwan_bullet();
+    objectmanager->spwan_enemy(true);
+    objectmanager->spwan_bullet(true);
 }
 
 void Game::running_game()
@@ -100,7 +100,6 @@ void Game::process_events()
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
         {
             reset_game();
-            //window.close();
         }
 
     }
@@ -169,5 +168,7 @@ void Game::terminate_game()
 void Game::reset_game()
 {
     objectmanager->reset_entities();
+    gamelogic->reset_score();
     initialize_entities();
+    end_game = false;
 }

@@ -14,6 +14,8 @@ GameLogic::~GameLogic()
 }
 
 int GameLogic::get_score() { return score; }
+void GameLogic::reset_score() { score = 0; }
+
 
 bool GameLogic::check_collision(Entity* e, Entity* b)
 {
@@ -94,3 +96,4 @@ bool GameLogic::is_out_boundary(sf::Vector2u window_size)
     }
     return false;
 }
+

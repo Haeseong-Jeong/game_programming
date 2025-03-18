@@ -9,8 +9,8 @@
 #include <iostream>>
 
 
-GameObjectManager::GameObjectManager(GameTextureManager* texturemanager, sf::Vector2u window_size) 
-    : texturemanager{ texturemanager }, window_size { window_size }, player { nullptr }
+GameObjectManager::GameObjectManager(GameTextureManager* texturemanager, sf::Vector2u window_size)
+    : texturemanager{ texturemanager }, window_size{ window_size }, player{ nullptr }
 {
 }
 
@@ -39,33 +39,29 @@ void GameObjectManager::spwan_player()
 }
 
 
-void GameObjectManager::spwan_enemy()
+void GameObjectManager::spwan_enemy(bool first_spawn)
 {
     float max_size = 3.0f;
     float max_speed = 350.f;
-    static bool first_spwan = true;
-    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spwan)
+    if (enemy_clock.getElapsedTime().asSeconds() >= enemy_period || first_spawn)
     {
         for (int i = 0; i < enemy_gen_num; i++)
         {
             Enemy* enemy = new Enemy(this, EntityType::ENEMY, max_size, max_speed);
             entities.push_back(enemy);
         }
-        first_spwan = false;
         enemy_clock.restart();
     }
 }
 
-void GameObjectManager::spwan_bullet()
+void GameObjectManager::spwan_bullet(bool first_spawn)
 {
     float size = 5.0f;
     float speed = 550.f;
-    static bool first_spwan = true;
-    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spwan)
+    if (bullet_clock.getElapsedTime().asSeconds() >= shoot_period || first_spawn)
     {
         Bullet* bullet = new Bullet(this, EntityType::BULLET, 5.f, 550.f);
         entities.push_back(bullet);
-        first_spwan = false;
         bullet_clock.restart();
     }
 }
@@ -85,10 +81,12 @@ void GameObjectManager::erase_entities()
     );
 }
 
+
 void GameObjectManager::reset_entities()
 {
     for (int i = 0; i < entities.size(); i++)
     {
         delete entities[i];
     };
+    entities.clear();
 }

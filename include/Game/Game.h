@@ -21,10 +21,10 @@ public:
 
 	sf::Window& get_window();
 
-	void set_background();
 	void set_text();
 	void update_score();
-	
+	void set_background();
+
 	bool initialize_game(); // texture 불러오기, initialize_entities()
 	void initialize_entities(); // create player, enemy, bullet
 
@@ -32,11 +32,10 @@ public:
 	void process_events(); // close event
 	void set_game(); //초기 셋팅, 
 	void update_game(); // clear -> draw, move, 뼈대와 박스 생성 -> display
+	void terminate_game(); // heap memory clear
 
 	void reset_game();
 
-	void terminate_game(); // heap memory clear
-	
 private:
 	bool end_game;
 

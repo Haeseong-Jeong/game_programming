@@ -20,5 +20,3 @@ sf::Font& GameTextureManager::get_font() { return font; }
 sf::Texture& GameTextureManager::get_ship_texture() { return ship_texture; }
 sf::Texture& GameTextureManager::get_projectile_texture() { return projectile_texture; }
 sf::Texture& GameTextureManager::get_background_texture() { return background_texture; }
-
-

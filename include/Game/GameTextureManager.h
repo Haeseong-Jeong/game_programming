@@ -22,4 +22,3 @@ private:
 	sf::Texture projectile_texture;
 	sf::Texture background_texture;
 };
-
