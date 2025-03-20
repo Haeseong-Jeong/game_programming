@@ -25,6 +25,12 @@ public:
 	Player* get_player();
 	std::vector<Entity*>& get_entities();
 
+	sf::Text* get_text();
+	sf::Sprite* get_background();
+
+	void set_text();
+	void set_background();
+
 	void spwan_player();
 	void spwan_enemy(bool first_spawn = false);
 	void spwan_bullet(bool first_spawn = false);
@@ -34,6 +40,10 @@ public:
 private:
 	sf::Vector2u window_size;
 	GameTextureManager* texturemanager;
+
+	std::string score_str;
+	sf::Text* text;
+	sf::Sprite* background;
 
 	Player* player;
 	std::vector<Entity*> entities;

@@ -16,6 +16,12 @@ GameLogic::~GameLogic()
 int GameLogic::get_score() { return score; }
 void GameLogic::reset_score() { score = 0; }
 
+void GameLogic::update_score()
+{
+    std::string score_str = "Score : ";
+    score_str.append(std::to_string(score));
+    objectmanager->get_text()->setString(score_str);
+}
 
 bool GameLogic::check_collision(Entity* e, Entity* b)
 {
@@ -41,7 +47,6 @@ void GameLogic::is_hit()
                     entities[i]->deactivate();
                     entities[j]->deactivate();
                     score = score + 1;
-                    //score += 1;
                     break;
                 }
             }
@@ -63,8 +68,6 @@ bool GameLogic::is_dead()
                 if (entities[j]->get_type() != EntityType::ENEMY) { continue; }
                 if (check_collision(entities[i], entities[j]))
                 {
-                    //end_game = true;
-                    //break;
                     return true;
                 }
             }
@@ -87,8 +90,6 @@ bool GameLogic::is_out_boundary(sf::Vector2u window_size)
         {
             if (entities[i]->get_type() == EntityType::PLAYER)
             {
-                //end_game = true;
-                //return;
                 return true;
             }
             entities[i]->deactivate();

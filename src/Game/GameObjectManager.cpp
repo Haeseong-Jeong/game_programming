@@ -20,12 +20,40 @@ GameObjectManager::~GameObjectManager()
     {
         delete entities[i];
     };
+    delete text;
+    delete background;
 }
 
 sf::Vector2u GameObjectManager::get_window_size() { return window_size; }
 GameTextureManager* GameObjectManager::get_texturemanager() { return texturemanager; }
 Player* GameObjectManager::get_player() { return player; }
 std::vector<Entity*>& GameObjectManager::get_entities() { return entities; }
+sf::Text* GameObjectManager::get_text() { return text; }
+sf::Sprite* GameObjectManager::get_background() { return background; }
+
+
+void GameObjectManager::set_text()
+{
+    text = new sf::Text(texturemanager->get_font());
+    score_str = "Score : ";
+    text->setString(score_str);
+    text->setCharacterSize(24); // in pixels, not points!
+    text->setFillColor(sf::Color::White);
+    text->setStyle(sf::Text::Bold);
+}
+
+
+void GameObjectManager::set_background()
+{
+    background = new sf::Sprite(texturemanager->get_background_texture());
+    sf::Vector2f texture_size(256.f, 128.f);
+    sf::IntRect crop_rect({ 257, 258 }, { 256, 128 });
+    background->setTextureRect(crop_rect);
+    sf::Vector2f scaleFactor(window_size.x / texture_size.x, window_size.y / texture_size.y);
+    background->setScale(scaleFactor);
+    background->setColor(sf::Color(255, 255, 255, 120));  // 4번째 인자가 투명도, 0 ~ 256 투명도 (0이 완전 투명)
+}
+
 
 
 void GameObjectManager::spwan_player()

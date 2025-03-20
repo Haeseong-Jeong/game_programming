@@ -16,6 +16,7 @@ public:
 
 	int get_score();
 	void reset_score();
+	void update_score();
 
 	bool check_collision(Entity* e, Entity* b); // 객체의 뼈대가 충돌했는지 판별
 	void is_hit(); // 총알과 적이 맞았는지 판별, check_collision() 활용

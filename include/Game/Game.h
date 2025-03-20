@@ -21,10 +21,6 @@ public:
 
 	sf::Window& get_window();
 
-	void set_text();
-	void update_score();
-	void set_background();
-
 	bool initialize_game(); // texture 불러오기, initialize_entities()
 	void initialize_entities(); // create player, enemy, bullet
 
@@ -41,10 +37,6 @@ private:
 
 	sf::Vector2u window_size;
 	sf::RenderWindow window;
-
-	std::string score_text;
-	sf::Text* text;
-	sf::Sprite* background;
 
 	sf::Clock clock;
 	float deltatime;
